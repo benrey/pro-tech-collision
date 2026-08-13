@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { asset } from "@/lib/assets";
 import { site } from "@/lib/site";
 import Reveal from "../Reveal";
 
@@ -7,7 +8,7 @@ export default function Hero() {
     <section className="hero" id="top">
       <div className="hero-media" aria-hidden="true">
         <Image
-          src="/images/workshop-hero.png"
+          src={asset("/images/workshop-hero.png")}
           alt=""
           fill
           priority

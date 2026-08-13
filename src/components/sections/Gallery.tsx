@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { asset } from "@/lib/assets";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { GalleryItem } from "@/lib/types";
@@ -69,7 +70,7 @@ export default async function Gallery() {
             {/* Concept imagery until the owner uploads real repair photos */}
             <figure className="gallery-tile gallery-tile-lg">
               <Image
-                src="/images/paint-booth-truck.png"
+                src={asset("/images/paint-booth-truck.png")}
                 alt="Concept image of a truck in a full-size paint booth"
                 fill
                 sizes="(max-width: 760px) 100vw, 45vw"
@@ -82,7 +83,7 @@ export default async function Gallery() {
             </figure>
             <figure className="gallery-tile gallery-tile-offset">
               <Image
-                src="/images/workshop-hero.png"
+                src={asset("/images/workshop-hero.png")}
                 alt="Concept image of a refinished car in a collision repair workshop"
                 fill
                 sizes="(max-width: 760px) 100vw, 35vw"
