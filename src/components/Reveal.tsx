@@ -18,7 +18,7 @@ export default function Reveal({
   children: ReactNode;
   /** Stagger offset in ms. */
   delay?: number;
-  as?: "div" | "section" | "li" | "span";
+  as?: "div" | "section" | "li" | "span" | "figure";
   className?: string;
 }) {
   const ref = useRef<HTMLElement | null>(null);

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { asset } from "@/lib/assets";
 import Reveal from "../Reveal";
 
 export default function Booth() {
@@ -7,7 +6,7 @@ export default function Booth() {
     <section className="booth-section" id="paint-booth">
       <Reveal className="booth-photo">
         <Image
-          src={asset("/images/paint-booth-truck.png")}
+          src="/images/paint-booth-truck.png"
           alt="A full-size automotive paint booth with a pickup truck inside"
           fill
           sizes="(max-width: 760px) 100vw, 55vw"
