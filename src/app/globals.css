@@ -46,19 +46,19 @@
   --header-h: 68px;
 
   /* ── Editorial palette (fixed, not themed) ── */
-  --paper: #f2eee6;
+  --paper: #f5f1eb;
   --paper-bright: #fbf9f4;
   --paper-deep: #e6ded1;
-  --ink: #0d0e0f;
-  --ink-soft: #17191a;
-  --ink-muted: #333839;
+  --ink: #20252a;
+  --ink-soft: #272c2e;
+  --ink-muted: #52595d;
   /* Oxide red, from the Precision Panel brand direction */
   --brand-red: #a51e3b;
   --brand-red-soft: #bf2c4c;
   --brand-red-deep: #69142a;
-  --pop: #8fb0d9; /* dusty steel blue — pairs with the crimson brand red */
-  --pop-deep: #2c4c85;
-  --line: rgba(13, 14, 15, 0.16);
+  --pop: #e4e8e8; /* aluminum — the brand palette's cool metal accent */
+  --pop-deep: #52595d;
+  --line: rgba(32, 37, 42, 0.16);
   --light-line: rgba(255, 255, 255, 0.18);
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -381,12 +381,12 @@ html {
   height: 6px;
   border-radius: 50%;
   background: var(--pop);
-  box-shadow: 0 0 0 0 rgba(143, 176, 217, 0.45);
+  box-shadow: 0 0 0 0 rgba(228, 232, 232, 0.45);
   animation: edt-pulse 2.4s infinite;
 }
 @keyframes edt-pulse {
   50% {
-    box-shadow: 0 0 0 5px rgba(143, 176, 217, 0);
+    box-shadow: 0 0 0 5px rgba(228, 232, 232, 0);
   }
 }
 
