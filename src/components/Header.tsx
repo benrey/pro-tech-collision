@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { site } from "@/lib/site";
+import Brand from "./Brand";
 
 const navLinks = [
   { href: "/#services", label: "Services" },
@@ -10,21 +11,6 @@ const navLinks = [
   { href: "/#reviews", label: "Reviews" },
   { href: "/#visit", label: "Visit us" },
 ];
-
-function Brand({ className = "" }: { className?: string }) {
-  return (
-    <Link className={`brand ${className}`} href="/#top" aria-label={`${site.name} home`}>
-      <span className="brand-mark" aria-hidden="true">
-        <i></i>
-        <b></b>
-      </span>
-      <span className="brand-type">
-        <strong>PRO TECH</strong>
-        <small>COLLISION</small>
-      </span>
-    </Link>
-  );
-}
 
 export default function Header() {
   const [open, setOpen] = useState(false);

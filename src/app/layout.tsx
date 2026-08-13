@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Syne } from "next/font/google";
+import { DM_Mono, Manrope, Space_Grotesk, Syne } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -14,6 +14,21 @@ const syne = Syne({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
   variable: "--font-display-var",
+  display: "swap",
+});
+
+// Logo lockup fonts, per the Precision Panel brand direction
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-grotesk-var",
+  display: "swap",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-logo-mono-var",
   display: "swap",
 });
 
@@ -77,7 +92,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${manrope.variable} ${syne.variable} font-sans antialiased`}>
+      <body
+        className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable} ${dmMono.variable} font-sans antialiased`}
+      >
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-semibold focus:text-accent-contrast"

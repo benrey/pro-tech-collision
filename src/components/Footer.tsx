@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
+import Brand from "./Brand";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -8,16 +9,9 @@ export default function Footer() {
     <>
       <footer className="site-footer">
         <div className="shell footer-top">
-          <Link className="brand brand-footer" href="/#top" aria-label={`${site.name} home`}>
-            <span className="brand-mark" aria-hidden="true">
-              <i></i>
-              <b></b>
-            </span>
-            <span className="brand-type">
-              <strong>PRO TECH</strong>
-              <small>COLLISION</small>
-            </span>
-          </Link>
+          <div>
+            <Brand />
+          </div>
           <p>
             Quality repairs.
             <br />
