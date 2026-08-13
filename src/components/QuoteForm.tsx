@@ -6,6 +6,9 @@ import { site } from "@/lib/site";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+const inputClass =
+  "w-full rounded-lg border border-border-subtle bg-surface-raised px-3.5 py-2.5 text-[15px] text-foreground placeholder:text-text-tertiary focus:border-primary focus:outline-none";
+
 export default function QuoteForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +20,8 @@ export default function QuoteForm() {
     const form = event.currentTarget;
     const data = new FormData(form);
 
-    // Honeypot: bots fill hidden fields, humans don't.
+    // Honeypot: bots fill hidden fields, humans don't. Silently accept so the
+    // bot believes it succeeded.
     if (data.get("company")) {
       setStatus("success");
       form.reset();
@@ -26,7 +30,9 @@ export default function QuoteForm() {
 
     if (!isSupabaseConfigured()) {
       setStatus("error");
-      setError(`Online requests aren't set up yet. Please call us at ${site.phone.display}.`);
+      setError(
+        `Online requests aren't set up yet. Please call us at ${site.phone.display}.`,
+      );
       return;
     }
 
@@ -48,23 +54,28 @@ export default function QuoteForm() {
       form.reset();
     } catch {
       setStatus("error");
-      setError(`Something went wrong sending your request. Please call us at ${site.phone.display}.`);
+      setError(
+        `Something went wrong sending your request. Please call us at ${site.phone.display}.`,
+      );
     }
   }
 
   if (status === "success") {
     return (
-      <div className="eform-success">
-        <h3>Request received.</h3>
-        <p>
-          Thanks — we&apos;ll get back to you shortly. If it&apos;s urgent, call
-          us at <a href={site.phone.href} style={{ fontWeight: 800 }}>{site.phone.display}</a>.
+      <div className="rounded-2xl border border-success/30 bg-success/10 p-8 text-center">
+        <h3 className="text-lg font-bold text-foreground">Request received</h3>
+        <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+          Thanks — we&apos;ll get back to you shortly. If it&apos;s urgent, give
+          us a call at{" "}
+          <a href={site.phone.href} className="font-semibold text-primary underline-offset-4 hover:underline">
+            {site.phone.display}
+          </a>
+          .
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="ebutton"
-          style={{ marginTop: 24 }}
+          className="mt-5 text-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           Send another request
         </button>
@@ -73,27 +84,48 @@ export default function QuoteForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="eform">
-      <label>
-        Name *
-        <input name="name" required autoComplete="name" placeholder="Your name" />
-      </label>
-      <label>
-        Phone *
-        <input name="phone" type="tel" required autoComplete="tel" placeholder="(432) 555-0000" />
-      </label>
-      <label className="field-wide">
-        Email
-        <input name="email" type="email" autoComplete="email" placeholder="you@example.com" />
-      </label>
-      <label className="field-wide">
-        Vehicle
-        <input name="vehicle" placeholder="Year, make, and model" />
-      </label>
-      <label className="field-wide">
-        What happened?
-        <textarea name="message" placeholder="Briefly describe the damage" />
-      </label>
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-border-subtle bg-surface p-6 sm:p-8">
+      <h3 className="text-xl font-bold text-foreground">Request a free estimate</h3>
+      <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+        Tell us what happened and we&apos;ll follow up. No obligation.
+      </p>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-1">
+          <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-foreground">
+            Name <span className="text-danger">*</span>
+          </label>
+          <input id="name" name="name" required autoComplete="name" className={inputClass} placeholder="Your name" />
+        </div>
+
+        <div className="sm:col-span-1">
+          <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-foreground">
+            Phone <span className="text-danger">*</span>
+          </label>
+          <input id="phone" name="phone" type="tel" required autoComplete="tel" className={inputClass} placeholder="(432) 555-0100" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground">
+            Email
+          </label>
+          <input id="email" name="email" type="email" autoComplete="email" className={inputClass} placeholder="you@example.com" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="vehicle" className="mb-1.5 block text-sm font-medium text-foreground">
+            Vehicle
+          </label>
+          <input id="vehicle" name="vehicle" className={inputClass} placeholder="Year, make, and model" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-foreground">
+            What happened?
+          </label>
+          <textarea id="message" name="message" rows={4} className={inputClass} placeholder="Briefly describe the damage" />
+        </div>
+      </div>
 
       {/* Honeypot — hidden from users, catches naive bots */}
       <div aria-hidden="true" className="absolute h-0 w-0 overflow-hidden opacity-0">
@@ -102,20 +134,24 @@ export default function QuoteForm() {
       </div>
 
       {error && (
-        <p role="alert" className="eform-error">
+        <p role="alert" className="mt-4 rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-foreground">
           {error}
         </p>
       )}
 
-      <button type="submit" disabled={status === "submitting"} className="ebutton ebutton-bright">
-        {status === "submitting" ? "Sending…" : "Send request"} <span aria-hidden="true">↗</span>
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        className="mt-6 w-full rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-accent-contrast transition-colors hover:bg-accent-hover disabled:opacity-60"
+      >
+        {status === "submitting" ? "Sending…" : "Send Request"}
       </button>
-      <p className="eform-note">
-        Prefer to talk? Call{" "}
-        <a href={site.phone.href} style={{ fontWeight: 800 }}>
-          {site.phone.display}
+
+      <p className="mt-3 text-center text-xs text-text-tertiary">
+        Prefer to talk?{" "}
+        <a href={site.phone.href} className="font-semibold text-primary underline-offset-4 hover:underline">
+          Call {site.phone.display}
         </a>
-        . No obligation either way.
       </p>
     </form>
   );

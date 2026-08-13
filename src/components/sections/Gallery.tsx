@@ -1,10 +1,6 @@
-import Image from "next/image";
-import { asset } from "@/lib/assets";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { GalleryItem } from "@/lib/types";
 import BeforeAfter from "../BeforeAfter";
-import Reveal from "../Reveal";
 
 /** Turns a storage path into a public URL for the gallery bucket. */
 function publicUrl(base: string, path: string) {
@@ -22,92 +18,48 @@ export default async function Gallery() {
       .eq("published", true)
       .order("sort_order", { ascending: false })
       .order("created_at", { ascending: false })
-      .limit(4);
+      .limit(12);
     items = data ?? [];
   }
 
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-  const tileClass = ["gallery-tile-lg", "gallery-tile-offset"];
 
   return (
-    <section className="gallery-section" id="gallery">
-      <div className="shell gallery-head">
-        <div>
-          <Reveal>
-            <p className="eyebrow eyebrow-light">
-              <span></span> Shop journal
-            </p>
-          </Reveal>
-          <Reveal delay={70}>
-            <h2 className="section-heading-gap">
-              The proof is
-              <br />
-              <em>in the finish.</em>
-            </h2>
-          </Reveal>
-        </div>
-        <Reveal delay={120}>
-          <Link className="ebutton ebutton-outline-light" href="/admin">
-            Owner photo portal <span aria-hidden="true">↗</span>
-          </Link>
-        </Reveal>
-      </div>
-
-      <div className="gallery-strip">
-        {items.length > 0 ? (
-          items.slice(0, 2).map((item, index) => (
-            <BeforeAfter
-              key={item.id}
-              className={tileClass[index]}
-              title={item.title}
-              index={String(index + 1).padStart(2, "0")}
-              beforeUrl={publicUrl(base, item.before_path)}
-              afterUrl={publicUrl(base, item.after_path)}
-            />
-          ))
-        ) : (
-          <>
-            {/* Concept imagery until the owner uploads real repair photos */}
-            <figure className="gallery-tile gallery-tile-lg">
-              <Image
-                src={asset("/images/paint-booth-truck.png")}
-                alt="Concept image of a truck in a full-size paint booth"
-                fill
-                sizes="(max-width: 760px) 100vw, 45vw"
-                className="object-cover"
-              />
-              <figcaption>
-                <span>Refinishing</span>
-                <b>CONCEPT</b>
-              </figcaption>
-            </figure>
-            <figure className="gallery-tile gallery-tile-offset">
-              <Image
-                src={asset("/images/workshop-hero.png")}
-                alt="Concept image of a refinished car in a collision repair workshop"
-                fill
-                sizes="(max-width: 760px) 100vw, 35vw"
-                className="object-cover"
-              />
-              <figcaption>
-                <span>Collision repair</span>
-                <b>CONCEPT</b>
-              </figcaption>
-            </figure>
-          </>
-        )}
-
-        <Reveal delay={150} className="gallery-cta">
-          <div className="gallery-plus" aria-hidden="true">
-            +
-          </div>
-          <p>
-            Fresh shop photos
-            <br />
-            appear here.
+    <section id="gallery" className="scroll-mt-24 border-b border-border-subtle bg-surface py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <header className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Our Work</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Before &amp; after
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-text-secondary">
+            Drag the slider on any repair to see the damage we started with.
           </p>
-          <span>Real before &amp; after work · via the owner portal</span>
-        </Reveal>
+        </header>
+
+        {items.length > 0 ? (
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <BeforeAfter
+                key={item.id}
+                title={item.title}
+                vehicle={item.vehicle}
+                description={item.description}
+                beforeUrl={publicUrl(base, item.before_path)}
+                afterUrl={publicUrl(base, item.after_path)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-10 rounded-2xl border border-dashed border-border-strong bg-surface-raised p-10 text-center">
+            <p className="text-base font-semibold text-foreground">No photos yet</p>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text-secondary">
+              Repair photos appear here once they&apos;re uploaded from the owner
+              dashboard. Sign in at <code className="rounded bg-surface px-1.5 py-0.5 text-xs">/admin</code> to
+              add before &amp; after shots.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,18 +1,17 @@
 import { site } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
 import type { Testimonial } from "@/lib/types";
-import Reveal from "../Reveal";
+import { StarIcon } from "../Icons";
 
-/**
- * Fallback quotes shown until the owner adds reviews via /admin. These are
- * short excerpts of public customer feedback from the shop's public listings,
- * attributed as such — not fabricated testimonials.
- */
-const fallbackReviews = [
-  { quote: "Repaired nicely… very impressed.", tag: "Body repair" },
-  { quote: "Great customer service.", tag: "Customer care" },
-  { quote: "My car looked brand new.", tag: "Collision repair" },
-];
+function Stars({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5 text-accent" role="img" aria-label={`${rating} out of 5 stars`}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <StarIcon key={n} filled={n <= rating} />
+      ))}
+    </div>
+  );
+}
 
 export default async function Testimonials() {
   const supabase = await createClient();
@@ -25,77 +24,76 @@ export default async function Testimonials() {
       .eq("published", true)
       .order("sort_order", { ascending: false })
       .order("created_at", { ascending: false })
-      .limit(3);
+      .limit(9);
     items = data ?? [];
   }
 
-  const hasReal = items.length > 0;
-
   return (
-    <section className="esection reviews-section" id="reviews">
-      <div className="shell">
-        <div>
-          <Reveal>
-            <p className="eyebrow">
-              <span></span> Customer notes
-            </p>
-          </Reveal>
-          <Reveal delay={70}>
-            <h2 className="section-heading-gap">
-              Kind words from
-              <br />
-              <em>the road.</em>
+    <section id="reviews" className="scroll-mt-24 border-b border-border-subtle py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <header className="flex flex-wrap items-end justify-between gap-4">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Reviews</p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              What our customers say
             </h2>
-          </Reveal>
-          <Reveal delay={100}>
+          </div>
+          <a
+            href={site.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Read reviews on Google →
+          </a>
+        </header>
+
+        {items.length > 0 ? (
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <li
+                key={item.id}
+                className="flex flex-col rounded-2xl border border-border-subtle bg-surface-raised p-6"
+              >
+                {item.rating != null && <Stars rating={item.rating} />}
+                <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
+                  &ldquo;{item.quote}&rdquo;
+                </blockquote>
+                <footer className="mt-4 border-t border-border-subtle pt-3">
+                  <p className="text-sm font-semibold text-foreground">{item.author}</p>
+                  {item.source && (
+                    <p className="text-xs text-text-tertiary">
+                      via {item.source}
+                      {item.reviewed_on
+                        ? ` · ${new Date(item.reviewed_on).toLocaleDateString("en-US", {
+                            month: "short",
+                            year: "numeric",
+                          })}`
+                        : ""}
+                    </p>
+                  )}
+                </footer>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-10 rounded-2xl border border-dashed border-border-strong bg-surface p-10 text-center">
+            <p className="text-base font-semibold text-foreground">No testimonials added yet</p>
+            <p className="mx-auto mt-2 max-w-lg text-sm leading-relaxed text-text-secondary">
+              Add real customer reviews from the owner dashboard. Copy them from
+              your Google listing with the customer&apos;s name as shown, and
+              they&apos;ll appear here.
+            </p>
             <a
-              className="source-link"
               href={site.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              className="mt-4 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline"
             >
-              Read reviews on Google <span aria-hidden="true">↗</span>
+              Open the Google listing →
             </a>
-          </Reveal>
-        </div>
-
-        <div className="review-grid">
-          {hasReal
-            ? items.map((item, index) => (
-                <Reveal
-                  as="figure"
-                  key={item.id}
-                  delay={80 + index * 60}
-                  className={`review-card ${index === 1 ? "review-card-dark" : ""}`}
-                >
-                  <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
-                  <figcaption>
-                    <span className="review-mark">✦</span>
-                    <span>
-                      {item.author}
-                      <small>{item.source ?? "Review"}</small>
-                    </span>
-                  </figcaption>
-                </Reveal>
-              ))
-            : fallbackReviews.map((review, index) => (
-                <Reveal
-                  as="figure"
-                  key={review.tag}
-                  delay={80 + index * 60}
-                  className={`review-card ${index === 1 ? "review-card-dark" : ""}`}
-                >
-                  <blockquote>&ldquo;{review.quote}&rdquo;</blockquote>
-                  <figcaption>
-                    <span className="review-mark">✦</span>
-                    <span>
-                      Public customer feedback
-                      <small>{review.tag}</small>
-                    </span>
-                  </figcaption>
-                </Reveal>
-              ))}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

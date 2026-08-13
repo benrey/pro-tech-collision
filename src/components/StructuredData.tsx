@@ -27,7 +27,7 @@ export default function StructuredData() {
     name: site.name,
     url: site.url,
     telephone: phone.display,
-    ...(site.email ? { email: site.email.display } : {}),
+    email: site.email.display,
     address: {
       "@type": "PostalAddress",
       streetAddress: address.street,

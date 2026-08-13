@@ -1,58 +1,38 @@
-import { services, site } from "@/lib/site";
-import Reveal from "../Reveal";
+import { services } from "@/lib/site";
 import { serviceIcons } from "../Icons";
 
 export default function Services() {
   return (
-    <section className="esection services-section" id="services">
-      <div className="shell">
-        <div className="split-heading">
-          <div>
-            <Reveal>
-              <p className="eyebrow">
-                <span></span> What we do
-              </p>
-            </Reveal>
-            <Reveal delay={70}>
-              <h2 className="section-heading-gap">
-                Care in every
-                <br />
-                <em>curve &amp; panel.</em>
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={130}>
-            <p className="section-intro">
-              Whether it is a small scrape or a hard hit, our shop focuses on
-              getting your vehicle back to its best—without adding more stress
-              to your week.
-            </p>
-          </Reveal>
-        </div>
+    <section id="services" className="scroll-mt-24 border-b border-border-subtle py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <header className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">What We Do</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Complete collision repair
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-text-secondary">
+            From a scuffed bumper to major structural damage, we handle every
+            stage of the repair in house.
+          </p>
+        </header>
 
-        <div className="service-grid">
-          {services.map((service, index) => {
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => {
             const Icon = serviceIcons[service.icon];
             return (
-              <Reveal
+              <li
                 key={service.slug}
-                delay={(index % 3) * 70}
-                as="div"
-                className={`service-card ${index === 0 ? "service-card-featured" : ""}`}
+                className="rounded-2xl border border-border-subtle bg-surface-raised p-6 transition-colors hover:border-border-strong"
               >
-                <span className="card-index">{String(index + 1).padStart(2, "0")}</span>
-                <div className="service-icon" aria-hidden="true">
-                  <Icon className="h-12 w-12" />
-                </div>
-                <h3>{service.title}</h3>
-                <p>{service.blurb}</p>
-                <a href={site.phone.href} aria-label={`Call about ${service.title.toLowerCase()}`}>
-                  Talk with the shop <span aria-hidden="true">↗</span>
-                </a>
-              </Reveal>
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary">
+                  <Icon className="h-6 w-6" />
+                </span>
+                <h3 className="mt-4 text-lg font-semibold text-foreground">{service.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{service.blurb}</p>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

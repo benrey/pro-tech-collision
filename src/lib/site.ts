@@ -31,37 +31,40 @@ export const site = {
   // ✅ CONFIRMED — the original share link you provided
   googleMapsUrl: "https://maps.app.goo.gl/nUG5VApLrZ1jpnh78",
 
-  // ✅ CONFIRMED — matches the Google listing coordinates and multiple
-  // directories (Carwise, CMac, Names & Numbers).
+  // ⚠️ NEEDS_VERIFICATION — coordinates place the shop in Midland, TX, but the
+  // exact street address was not retrievable. Replace with the real address.
   address: {
-    street: "1226 S Midland Dr",
+    street: "REPLACE ME — street address",
     city: "Midland",
     state: "TX",
-    zip: "79703",
+    zip: "REPLACE ME",
     country: "US",
-    verified: true,
+    verified: false,
   },
 
-  // ✅ CONFIRMED — consistent across CMac and Names & Numbers directories.
+  // ⚠️ NEEDS_VERIFICATION — placeholder. Never ship a guessed phone number.
   phone: {
-    display: "(432) 699-5000",
-    href: "tel:+14326995000",
-    verified: true,
+    display: "(432) 555-0100",
+    href: "tel:+14325550100",
+    verified: false,
   },
 
-  // No public email found for the shop. Leave null and the site hides the
-  // email line; set an object { display, href, verified } when known.
-  email: null as null | { display: string; href: string; verified: boolean },
+  // ⚠️ NEEDS_VERIFICATION — placeholder email.
+  email: {
+    display: "REPLACE-ME@example.com",
+    href: "mailto:REPLACE-ME@example.com",
+    verified: false,
+  },
 
-  // ⚠️ NEEDS_VERIFICATION — from a third-party directory (CMac), which can be
-  // stale. Confirm with the owner before launch.
+  // ⚠️ NEEDS_VERIFICATION — typical body shop hours, NOT the real ones.
   hours: {
     verified: false,
     // schema.org dayOfWeek values, used for both display and structured data
     regular: [
-      { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:00", label: "Mon – Fri" },
+      { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "17:30", label: "Mon – Fri" },
+      { days: ["Saturday"], opens: "09:00", closes: "13:00", label: "Saturday" },
     ],
-    closed: [{ days: ["Saturday", "Sunday"], label: "Sat – Sun" }],
+    closed: [{ days: ["Sunday"], label: "Sunday" }],
   },
 
   // ⚠️ NEEDS_VERIFICATION — these are the common industry credentials, but we
