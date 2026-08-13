@@ -1,6 +1,8 @@
 import { site } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
 import type { Testimonial } from "@/lib/types";
+import Reveal from "../Reveal";
+import Spotlight from "../Spotlight";
 import { StarIcon } from "../Icons";
 
 function Stars({ rating }: { rating: number }) {
@@ -31,51 +33,54 @@ export default async function Testimonials() {
   return (
     <section id="reviews" className="scroll-mt-24 border-b border-border-subtle py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <header className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Reviews</p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              What our customers say
-            </h2>
-          </div>
-          <a
-            href={site.googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
-          >
-            Read reviews on Google →
-          </a>
-        </header>
+        <Reveal>
+          <header className="flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Reviews</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                What our customers say
+              </h2>
+            </div>
+            <a
+              href={site.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              Read reviews on Google →
+            </a>
+          </header>
+        </Reveal>
 
         {items.length > 0 ? (
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex flex-col rounded-2xl border border-border-subtle bg-surface-raised p-6"
-              >
-                {item.rating != null && <Stars rating={item.rating} />}
-                <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
-                  &ldquo;{item.quote}&rdquo;
-                </blockquote>
-                <footer className="mt-4 border-t border-border-subtle pt-3">
-                  <p className="text-sm font-semibold text-foreground">{item.author}</p>
-                  {item.source && (
-                    <p className="text-xs text-text-tertiary">
-                      via {item.source}
-                      {item.reviewed_on
-                        ? ` · ${new Date(item.reviewed_on).toLocaleDateString("en-US", {
-                            month: "short",
-                            year: "numeric",
-                          })}`
-                        : ""}
-                    </p>
-                  )}
-                </footer>
-              </li>
-            ))}
-          </ul>
+          <Spotlight>
+            <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((item, index) => (
+                <Reveal as="li" key={item.id} delay={(index % 3) * 90}>
+                  <div className="spot-card flex h-full flex-col rounded-2xl border border-border-subtle bg-surface-raised p-6">
+                    {item.rating != null && <Stars rating={item.rating} />}
+                    <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
+                      &ldquo;{item.quote}&rdquo;
+                    </blockquote>
+                    <footer className="mt-4 border-t border-border-subtle pt-3">
+                      <p className="text-sm font-semibold text-foreground">{item.author}</p>
+                      {item.source && (
+                        <p className="text-xs text-text-tertiary">
+                          via {item.source}
+                          {item.reviewed_on
+                            ? ` · ${new Date(item.reviewed_on).toLocaleDateString("en-US", {
+                                month: "short",
+                                year: "numeric",
+                              })}`
+                            : ""}
+                        </p>
+                      )}
+                    </footer>
+                  </div>
+                </Reveal>
+              ))}
+            </ul>
+          </Spotlight>
         ) : (
           <div className="mt-10 rounded-2xl border border-dashed border-border-strong bg-surface p-10 text-center">
             <p className="text-base font-semibold text-foreground">No testimonials added yet</p>

@@ -24,7 +24,7 @@ export default function BeforeAfter({ beforeUrl, afterUrl, title, vehicle, descr
   const labelId = useId();
 
   return (
-    <figure className="overflow-hidden rounded-2xl border border-border-subtle bg-surface-raised">
+    <figure className="spot-card overflow-hidden rounded-2xl border border-border-subtle bg-surface-raised">
       <div className="relative aspect-4/3 w-full select-none overflow-hidden bg-surface">
         {/* After image sits underneath, fully visible */}
         <Image

@@ -64,7 +64,7 @@ export default function Footer() {
             href="/admin"
             className="text-sm text-text-tertiary underline-offset-4 hover:text-foreground hover:underline"
           >
-            Owner login
+            Login
           </Link>
         </div>
       </div>

@@ -142,7 +142,7 @@ export default function QuoteForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-6 w-full rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-accent-contrast transition-colors hover:bg-accent-hover disabled:opacity-60"
+        className="btn-shine mt-6 w-full rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-accent-contrast hover:bg-accent-hover disabled:opacity-60"
       >
         {status === "submitting" ? "Sending…" : "Send Request"}
       </button>

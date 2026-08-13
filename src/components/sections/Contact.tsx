@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import QuoteForm from "../QuoteForm";
+import Reveal from "../Reveal";
 import { ClockIcon, MapPinIcon, PhoneIcon } from "../Icons";
 
 /** Formats "08:00" as "8:00 AM" for display. */
@@ -14,23 +15,27 @@ export default function Contact() {
   const { address, phone, email, hours } = site;
   const fullAddress = `${address.street}, ${address.city}, ${address.state} ${address.zip}`;
 
-  // Embedded map centred on the confirmed coordinates. Uses the keyless embed
-  // endpoint so no Google Maps API key is required.
-  const mapSrc = `https://www.google.com/maps?q=${site.geo.latitude},${site.geo.longitude}&z=15&output=embed`;
+  // Embedded map searching by business name + address, which snaps to the
+  // actual Google Business listing pin instead of raw coordinates. Keyless
+  // embed endpoint — no Maps API key required.
+  const mapQuery = encodeURIComponent(`${site.name} ${fullAddress}`);
+  const mapSrc = `https://www.google.com/maps?q=${mapQuery}&z=15&output=embed`;
 
   return (
     <section id="contact" className="scroll-mt-24 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <header className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Get In Touch</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Visit or call the shop
-          </h2>
-        </header>
+        <Reveal>
+          <header className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent">Get In Touch</p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Visit or call the shop
+            </h2>
+          </header>
+        </Reveal>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           {/* Details + map */}
-          <div>
+          <Reveal>
             <ul className="space-y-6">
               <li className="flex items-start gap-3.5">
                 <PhoneIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
@@ -42,11 +47,13 @@ export default function Contact() {
                   >
                     {phone.display}
                   </a>
-                  <p className="mt-0.5 text-sm text-text-secondary">
-                    <a href={email.href} className="underline-offset-4 hover:underline">
-                      {email.display}
-                    </a>
-                  </p>
+                  {email && (
+                    <p className="mt-0.5 text-sm text-text-secondary">
+                      <a href={email.href} className="underline-offset-4 hover:underline">
+                        {email.display}
+                      </a>
+                    </p>
+                  )}
                 </div>
               </li>
 
@@ -101,9 +108,11 @@ export default function Contact() {
                 style={{ border: 0, display: "block" }}
               />
             </div>
-          </div>
+          </Reveal>
 
-          <QuoteForm />
+          <Reveal delay={120}>
+            <QuoteForm />
+          </Reveal>
         </div>
       </div>
     </section>

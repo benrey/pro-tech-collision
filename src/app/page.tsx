@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import StructuredData from "@/components/StructuredData";
 import Contact from "@/components/sections/Contact";
 import Credibility from "@/components/sections/Credibility";
+import CtaBand from "@/components/sections/CtaBand";
 import Gallery from "@/components/sections/Gallery";
 import Hero from "@/components/sections/Hero";
 import Process from "@/components/sections/Process";
@@ -21,6 +22,7 @@ export default function Home() {
         <Process />
         <Gallery />
         <Testimonials />
+        <CtaBand />
         <Contact />
       </main>
       <Footer />

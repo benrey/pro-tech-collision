@@ -16,6 +16,7 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Lock body scroll while the mobile drawer is open.
   useEffect(() => {
@@ -25,8 +26,17 @@ export default function Header() {
     };
   }, [open]);
 
+  // Elevate the header once the page is scrolled.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="glass sticky top-0 z-50 w-full border-b border-border-subtle">
+    <header
+      className={`glass sticky top-0 z-50 w-full border-b border-border-subtle transition-shadow duration-300 ${scrolled ? "header-scrolled" : ""}`}
+    >
       <nav
         className="mx-auto flex h-[var(--header-h)] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6"
         aria-label="Main"
