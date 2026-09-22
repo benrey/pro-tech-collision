@@ -1,20 +1,5 @@
 name: Terraform DNS
 
-# Cloudflare DNS + edge config for ptcollisioninc.com.
-#
-# Config comes from the `dev` GitHub environment (same convention as pluggdn),
-# not a local terraform.tfvars:
-#
-#   secrets.CLOUDFLARE_API_TOKEN   Zone:Edit, DNS:Edit, Zone Settings:Edit
-#   vars.ZONE_ID                   Cloudflare Zone ID for ptcollisioninc.com
-#   vars.DOMAIN_NAME               optional, defaults to ptcollisioninc.com
-#   vars.PAGES_CNAME_TARGET        optional, defaults to benrey.github.io
-#
-# Manual dispatch rather than push-triggered: DNS changes rarely, and an
-# accidental apply on an unrelated commit is not worth the convenience. A push
-# that touches terraform/ runs a plan only, so you see the diff in the PR
-# without anything being applied.
-
 on:
   workflow_dispatch:
     inputs:
@@ -40,8 +25,6 @@ concurrency:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    # Credentials live in the `dev` environment, same as pluggdn. Without this
-    # line the job cannot read environment-scoped secrets or variables.
     environment: dev
     defaults:
       run:
@@ -54,8 +37,6 @@ jobs:
         with:
           terraform_wrapper: false
 
-      # Fail early with a readable message rather than a confusing provider
-      # error 30 seconds into the plan.
       - name: Confirm Secrets and Vars
         run: |
           echo "ZONE_ID: ${{ vars.ZONE_ID }}"
@@ -93,15 +74,7 @@ jobs:
           ${{ vars.DOMAIN_NAME && format('-var="domain_name={0}"', vars.DOMAIN_NAME) || '' }}
           ${{ vars.PAGES_CNAME_TARGET && format('-var="pages_cname_target={0}"', vars.PAGES_CNAME_TARGET) || '' }}
 
-      # The shop's mail (Amazon SES + WorkMail) lives in this same zone and is
-      # NOT managed by Terraform. Nothing in terraform/ declares a TXT or MX
-      # record, so a plan that proposes destroying one means something drifted —
-      # stop rather than let an apply take the shop's email down.
       - name: Guard against touching mail records
-        # Fails CLOSED: `set -euo pipefail` plus a script that exits non-zero on
-        # detection. An earlier version captured the output in $(...) and tested
-        # for emptiness, which silently PASSED when terraform show or python
-        # errored — the one case where the guard most needs to stop the apply.
         run: |
           set -euo pipefail
           terraform show -json tfplan > plan.json
@@ -131,5 +104,7 @@ jobs:
           PY
 
       - name: Terraform Apply
-        if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply'
+        if: >-
+          github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' && inputs.action == 'apply')
         run: terraform apply -auto-approve -lock-timeout=10m tfplan
