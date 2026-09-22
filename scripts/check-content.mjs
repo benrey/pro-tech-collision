@@ -46,7 +46,7 @@ if (unverifiedFlags > 0) {
   console.log(
     `  ${unverifiedFlags} field group(s) still marked ${BOLD}verified: false${RESET}`,
   );
-  console.log("    (hours, certifications, insurance carriers, warranty, years in business)\n");
+  console.log("    (business hours)\n");
 }
 
 console.log(`  Edit ${BOLD}src/lib/site.ts${RESET}, then set each 'verified' flag to true.`);

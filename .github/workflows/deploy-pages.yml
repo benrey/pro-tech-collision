@@ -32,14 +32,21 @@ jobs:
       - name: Remove server-only proxy for static export
         run: rm src/proxy.ts
 
+      # Served at the apex via Cloudflare, so no basePath: the site sits at /
+      # on ptcollisioninc.com, not at /<repo> on github.io. Cloudflare proxies
+      # this origin -- see terraform/ for the DNS and edge config.
       - name: Build static export
         run: npm run build
         env:
           STATIC_EXPORT: "1"
-          NEXT_PUBLIC_BASE_PATH: /pro-tech-collision
-          NEXT_PUBLIC_SITE_URL: https://benrey.github.io/pro-tech-collision
+          NEXT_PUBLIC_SITE_URL: https://ptcollisioninc.com
 
       - run: touch out/.nojekyll
+
+      # Tells GitHub Pages to accept the custom domain. Without it Pages serves
+      # the site only under github.io and 404s the proxied Cloudflare requests.
+      - name: Add CNAME for the custom domain
+        run: echo 'ptcollisioninc.com' > out/CNAME
 
       - uses: actions/upload-pages-artifact@v3
         with:

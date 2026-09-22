@@ -33,9 +33,10 @@ const dmMono = DM_Mono({
 });
 
 const description =
-  `Collision repair, paint, frame straightening, and hail damage repair in ` +
-  `${site.address.city}, ${site.address.state}. Free estimates, all insurance ` +
-  `claims handled, and a written warranty on workmanship.`;
+  `Complete collision repair, paint, frame work, and hail damage repair in ` +
+  `${site.address.city}, ${site.address.state}. Vehicles restored to ` +
+  `pre-accident condition in a down-draft heated paint booth. Most insurance ` +
+  `claims accepted, and all work guaranteed.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

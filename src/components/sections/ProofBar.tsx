@@ -1,9 +1,10 @@
 import Reveal from "../Reveal";
 
+/** The shop's headline promises, kept to what the owner has confirmed. */
 const proofItems = [
-  { index: "01", text: ["Full-service collision", "repair & refinishing"] },
-  { index: "02", text: ["Insurance claims", "welcome"] },
-  { index: "03", text: ["Frame specialists", "& truck repair"] },
+  { index: "01", text: ["Complete collision", "repair"] },
+  { index: "02", text: ["Most insurance", "claims accepted"] },
+  { index: "03", text: ["All work", "guaranteed"] },
 ];
 
 export default function ProofBar() {

@@ -9,6 +9,7 @@ import Hero from "@/components/sections/Hero";
 import Process from "@/components/sections/Process";
 import ProofBar from "@/components/sections/ProofBar";
 import Services from "@/components/sections/Services";
+import ShopPromise from "@/components/sections/ShopPromise";
 import Testimonials from "@/components/sections/Testimonials";
 import Visit from "@/components/sections/Visit";
 
@@ -24,6 +25,7 @@ export default function Home() {
         <Services />
         <Booth />
         <Process />
+        <ShopPromise />
         <Gallery />
         <Testimonials />
         <Visit />

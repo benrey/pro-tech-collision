@@ -962,6 +962,11 @@ html {
   line-height: 1.7;
 }
 
+/* Shop promises — reuses the process list layout on the lighter paper */
+.promise-section {
+  background: var(--paper);
+}
+
 /* Gallery */
 .gallery-section {
   overflow: hidden;

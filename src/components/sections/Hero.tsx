@@ -32,8 +32,9 @@ export default function Hero() {
         </Reveal>
         <Reveal delay={140}>
           <p className="hero-copy">
-            Precision bodywork, considered refinishing, and a team that makes a
-            hard moment feel a little easier.
+            Complete collision repair that restores your vehicle to its
+            pre-accident condition — and a team that makes a hard moment feel a
+            little easier.
           </p>
         </Reveal>
         <Reveal delay={210}>

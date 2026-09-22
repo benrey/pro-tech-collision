@@ -1,0 +1,132 @@
+name: Terraform DNS
+
+# Cloudflare DNS + edge config for ptcollisioninc.com.
+#
+# Config comes from GitHub variables and secrets (same convention as pluggdn),
+# not a local terraform.tfvars:
+#
+#   secrets.CLOUDFLARE_API_TOKEN   Zone:Edit, DNS:Edit, Zone Settings:Edit
+#   vars.ZONE_ID                   Cloudflare Zone ID for ptcollisioninc.com
+#   vars.DOMAIN_NAME               optional, defaults to ptcollisioninc.com
+#   vars.PAGES_CNAME_TARGET        optional, defaults to benrey.github.io
+#
+# Manual dispatch rather than push-triggered: DNS changes rarely, and an
+# accidental apply on an unrelated commit is not worth the convenience. A push
+# that touches terraform/ runs a plan only, so you see the diff in the PR
+# without anything being applied.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "plan (safe, read-only) or apply"
+        required: true
+        default: plan
+        type: choice
+        options: [plan, apply]
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-dns.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-dns
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/envs/prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      # Fail early with a readable message rather than a confusing provider
+      # error 30 seconds into the plan.
+      - name: Confirm Secrets and Vars
+        run: |
+          echo "ZONE_ID: ${{ vars.ZONE_ID }}"
+          echo "CLOUDFLARE_API_TOKEN length:" ${{ secrets.CLOUDFLARE_API_TOKEN }} | wc -c
+          echo "DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}"
+          echo "PAGES_CNAME_TARGET: ${{ vars.PAGES_CNAME_TARGET }}"
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ vars.ZONE_ID }}" ]; then
+            echo "::error::ZONE_ID variable is not set"
+            exit 1
+          fi
+
+      - name: Terraform Init
+        run: |
+          max_retries=3
+          retry_count=0
+          until terraform init -upgrade; do
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -ge $max_retries ]; then
+              echo "Terraform init failed after $max_retries attempts"
+              exit 1
+            fi
+            echo "Terraform init failed, retrying in 10 seconds... (attempt $retry_count/$max_retries)"
+            sleep 10
+          done
+
+      - name: Terraform Plan
+        run: >
+          terraform plan -lock-timeout=10m -out=tfplan
+          -var="cloudflare_zone_id=${{ vars.ZONE_ID }}"
+          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}"
+          ${{ vars.DOMAIN_NAME && format('-var="domain_name={0}"', vars.DOMAIN_NAME) || '' }}
+          ${{ vars.PAGES_CNAME_TARGET && format('-var="pages_cname_target={0}"', vars.PAGES_CNAME_TARGET) || '' }}
+
+      # The shop's mail (Amazon SES + WorkMail) lives in this same zone and is
+      # NOT managed by Terraform. Nothing in terraform/ declares a TXT or MX
+      # record, so a plan that proposes destroying one means something drifted —
+      # stop rather than let an apply take the shop's email down.
+      - name: Guard against touching mail records
+        # Fails CLOSED: `set -euo pipefail` plus a script that exits non-zero on
+        # detection. An earlier version captured the output in $(...) and tested
+        # for emptiness, which silently PASSED when terraform show or python
+        # errored — the one case where the guard most needs to stop the apply.
+        run: |
+          set -euo pipefail
+          terraform show -json tfplan > plan.json
+          python3 - plan.json <<'PY'
+          import json, sys
+
+          plan = json.load(open(sys.argv[1]))
+          hits = []
+          for c in plan.get("resource_changes", []):
+              actions = c.get("change", {}).get("actions", [])
+              if actions in (["no-op"], ["read"]):
+                  continue
+              after = c.get("change", {}).get("after") or {}
+              before = c.get("change", {}).get("before") or {}
+              rtype = after.get("type") or before.get("type") or ""
+              name = after.get("name") or before.get("name") or ""
+              content = str(after.get("content") or before.get("content") or "")
+              if rtype in ("TXT", "MX") or "_dmarc" in name or "spf1" in content:
+                  hits.append(f"{c.get('address')} [{rtype} {name}] {actions}")
+
+          if hits:
+              print("::error::Plan touches mail records — refusing to continue:")
+              for h in hits:
+                  print(f"  {h}")
+              sys.exit(1)
+          print("✅ Plan touches no TXT/MX records; mail is unaffected.")
+          PY
+
+      - name: Terraform Apply
+        if: github.event_name == 'workflow_dispatch' && inputs.action == 'apply'
+        run: terraform apply -auto-approve -lock-timeout=10m tfplan

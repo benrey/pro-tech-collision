@@ -13,7 +13,7 @@ export default function Booth() {
           sizes="(max-width: 760px) 100vw, 55vw"
           className="object-cover"
         />
-        <span className="photo-kicker">Precision in a controlled environment</span>
+        <span className="photo-kicker">Down-draft heated paint booth</span>
       </Reveal>
       <div className="booth-copy">
         <Reveal>
@@ -23,25 +23,25 @@ export default function Booth() {
         </Reveal>
         <Reveal delay={70}>
           <h2 className="section-heading-gap">
-            The full-size
+            A down-draft
             <br />
-            <em>car oven.</em>
+            <em>heated booth.</em>
           </h2>
         </Reveal>
         <Reveal delay={130}>
           <p>
-            A dedicated paint booth gives every vehicle the clean, controlled
-            conditions a lasting finish deserves. It is a serious piece of
-            equipment—and a better way to bring the final coat home.
+            Our down-draft heated paint booth pulls air down and away from the
+            vehicle while the finish cures, which is what ensures a professional
+            paint job. We spray high-quality paint materials in it, every time.
           </p>
         </Reveal>
         <Reveal delay={180}>
           <div className="booth-notes">
             <span>
-              <b>01</b> Controlled space
+              <b>01</b> Down-draft airflow
             </span>
             <span>
-              <b>02</b> Full vehicle capacity
+              <b>02</b> High-quality paint materials
             </span>
           </div>
         </Reveal>

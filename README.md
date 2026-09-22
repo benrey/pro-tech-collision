@@ -7,14 +7,12 @@ Built with Next.js 16, React 19, Tailwind v4, and Supabase.
 
 ---
 
-## ⚠️ Before you launch: replace the placeholder business data
+## ⚠️ Before you launch: confirm the business hours
 
-**Only the business name and map coordinates were verified.** The phone number,
-street address, email, hours, certifications, insurance carriers, and warranty
-in [`src/lib/site.ts`](src/lib/site.ts) are **invented placeholders**.
-
-Publishing a wrong phone number sends customers to a dead line, and claiming
-certifications the shop doesn't hold is a legal problem. Fix these first:
+Name, address, phone, coordinates, and the shop's service claims are confirmed.
+**Business hours in [`src/lib/site.ts`](src/lib/site.ts) came from a third-party
+directory and are still unverified** — directory hours go stale, and hours that
+contradict the Google Business Profile hurt local ranking.
 
 ```bash
 npm run check:content   # lists everything still unverified
@@ -24,18 +22,28 @@ Edit `src/lib/site.ts`, then flip each `verified: false` flag to `true`. The
 command exits non-zero until every placeholder is gone, so you can wire it into
 CI as a launch gate.
 
-Specifically confirm with the owner:
-
 | Field | Where | Why it matters |
 |---|---|---|
-| Phone number | `site.phone` | Currently `(432) 555-0100` — a fake number |
-| Street address + ZIP | `site.address` | Shows on the page **and** in schema.org data |
-| Email | `site.email` | Currently `REPLACE-ME@example.com` |
 | Hours | `site.hours` | Must match the Google Business Profile or local SEO suffers |
-| Certifications | `site.certifications` | **Remove any the shop doesn't actually hold** |
-| Insurance carriers | `site.insurance.carriers` | Confirm which they really work with |
-| Warranty terms | `site.warranty` | Confirm what's actually offered in writing |
-| Years in business | `site.yearsInBusiness` | Currently a guess |
+| Email | `site.email` | Currently `null`, which hides the email line — set it if the shop has one |
+
+### Do not add credentials
+
+The site deliberately makes **no claim of any license, certification, or
+accreditation** — no I-CAR, no ASE, no manufacturer certification. The shop has
+not confirmed holding any, and advertising a credential you don't hold is a real
+legal problem.
+
+The only promises the site makes are the owner's own, held in `site.claims`:
+
+- Restored to pre-accident condition
+- Down-draft heated paint booth for a professional paint job
+- High-quality paint materials
+- Complete collision repair
+- All work guaranteed
+- Most insurance claims accepted
+
+Anything beyond that list needs the owner's sign-off before it goes on the page.
 
 ---
 

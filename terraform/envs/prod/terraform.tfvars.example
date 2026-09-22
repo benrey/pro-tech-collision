@@ -1,0 +1,31 @@
+# Config normally comes from GitHub variables and secrets, NOT from this file.
+# The Terraform DNS workflow (.github/workflows/terraform-dns.yml) passes them
+# as -var flags, matching the pluggdn convention:
+#
+#   secrets.CLOUDFLARE_API_TOKEN   Zone:Zone:Edit, Zone:DNS:Edit, Zone:Zone Settings:Edit
+#   vars.ZONE_ID                   Cloudflare Zone ID for ptcollisioninc.com
+#   vars.DOMAIN_NAME               optional (defaults to ptcollisioninc.com)
+#   vars.PAGES_CNAME_TARGET        optional (defaults to benrey.github.io)
+#
+# Set them once with:
+#   gh secret set CLOUDFLARE_API_TOKEN
+#   gh variable set ZONE_ID --body "<zone id from the Cloudflare dashboard>"
+#
+# This file exists only for running a plan locally. Copy it to terraform.tfvars
+# (gitignored) and fill it in; prefer the env var for the token so it never
+# lands on disk:
+#   export TF_VAR_cloudflare_api_token="..."
+
+cloudflare_api_token = "REPLACE_ME"
+
+# Supply the zone id directly, as CI does. This skips the zone lookup, so the
+# API token needs no account-level read permission.
+cloudflare_zone_id = "REPLACE_ME"
+
+domain_name        = "ptcollisioninc.com"
+pages_cname_target = "benrey.github.io"
+
+# Only consulted when cloudflare_zone_id is empty (the zone-lookup path).
+# The zone already exists, so it would be adopted, not created.
+# cloudflare_account_id = "REPLACE_ME"
+# create_zone           = false

@@ -1,0 +1,17 @@
+# Local state holds zone IDs and resource metadata — never commit it.
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Provider binaries and module cache. The lock file IS committed (it pins the
+# provider version so every apply resolves identically) -- only the cache is not.
+.terraform/
+
+# Variable files hold the API token.
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Plan output can contain sensitive values in cleartext.
+*.tfplan
+crash.log

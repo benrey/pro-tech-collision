@@ -4,11 +4,14 @@
  * ─────────────────────────────────────────────────────────────────────────
  *  ⚠️  FIELDS MARKED `NEEDS_VERIFICATION` ARE PLACEHOLDERS.
  *
- *  Only the business name and map coordinates were confirmed (resolved from
- *  the Google Maps share link). Everything else — phone, street address,
- *  hours, certifications, insurers — was NOT verifiable and is invented
- *  placeholder text. Publishing wrong contact info actively costs the shop
- *  customers, so replace these before going live.
+ *  Name, address, phone, coordinates and the shop's own service claims are
+ *  confirmed. Business hours are still from a third-party directory and are
+ *  NOT verified — confirm with the owner before launch. Publishing wrong
+ *  contact info actively costs the shop customers.
+ *
+ *  Do NOT add licenses, certifications, or accreditations here. The shop has
+ *  not confirmed any, and claiming an uncertified credential is a real legal
+ *  problem.
  *
  *  Run `npm run check:content` to list everything still unverified.
  * ─────────────────────────────────────────────────────────────────────────
@@ -59,103 +62,153 @@ export const site = {
     verified: false,
     // schema.org dayOfWeek values, used for both display and structured data
     regular: [
-      { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:00", label: "Mon – Fri" },
+      {
+        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "17:00",
+        label: "Mon – Fri",
+      },
     ],
     closed: [{ days: ["Saturday", "Sunday"], label: "Sat – Sun" }],
   },
 
-  // ⚠️ NEEDS_VERIFICATION — these are the common industry credentials, but we
-  // have NOT confirmed which ones this shop actually holds. Remove any it
-  // doesn't have: claiming an uncertified credential is a real legal problem.
-  certifications: {
-    verified: false,
+  // ✅ CONFIRMED — the shop's own claims, supplied by the owner. These are
+  // the only promises the site makes; do not add credentials, licenses, or
+  // certifications unless the owner confirms the shop actually holds them.
+  claims: {
+    verified: true,
     items: [
-      { name: "I-CAR Gold Class", detail: "Industry training standard for collision repair" },
-      { name: "ASE Certified Technicians", detail: "National Institute for Automotive Service Excellence" },
-      { name: "Manufacturer Certified", detail: "Trained on OEM-approved repair procedures" },
+      {
+        name: "Restored to pre-accident condition",
+        detail:
+          "Complete collision repair that brings the vehicle back to the way it was before the wreck.",
+      },
+      {
+        name: "Down-draft heated paint booth",
+        detail:
+          "A professional paint job in a controlled, heated booth that pulls air down and away from the finish.",
+      },
+      {
+        name: "High-quality paint materials",
+        detail:
+          "Quality materials on every panel, so the color holds up long after the repair.",
+      },
+      {
+        name: "All work guaranteed",
+        detail: "We stand behind every repair that leaves the shop.",
+      },
+      {
+        name: "Most insurance claims accepted",
+        detail: "We work with most carriers and help you move the claim along.",
+      },
     ],
   },
 
-  // ⚠️ NEEDS_VERIFICATION — placeholder list. Confirm which insurers the shop
-  // actually works with before publishing.
+  // ✅ CONFIRMED — the owner's wording. No carrier list: naming specific
+  // insurers implies a relationship the shop has not confirmed.
   insurance: {
-    verified: false,
-    note: "We work with all major insurance carriers and can help manage your claim.",
-    carriers: ["State Farm", "Allstate", "GEICO", "Progressive", "USAA", "Farmers"],
+    verified: true,
+    note: "Most insurance claims accepted. We'll help you get the claim moving.",
   },
 
-  // ⚠️ NEEDS_VERIFICATION — confirm the actual warranty offered.
-  warranty: {
-    verified: false,
-    headline: "Lifetime Warranty",
-    detail: "Written warranty on workmanship for as long as you own your vehicle.",
-  },
-
-  // ⚠️ NEEDS_VERIFICATION — confirm how long the shop has operated.
-  yearsInBusiness: {
-    verified: false,
-    value: 20,
+  // ✅ CONFIRMED — the owner's wording. Deliberately not a term-limited or
+  // "lifetime" warranty: it's a guarantee on the work, stated plainly.
+  guarantee: {
+    verified: true,
+    headline: "All work guaranteed",
+    detail: "Every repair that leaves this shop is backed by us.",
   },
 
   // Service area for local SEO. Midland/Odessa is the Permian Basin metro.
-  serviceArea: ["Midland", "Odessa", "Big Spring", "Stanton", "Andrews", "Permian Basin"],
+  serviceArea: [
+    "Midland",
+    "Odessa",
+    "Big Spring",
+    "Stanton",
+    "Andrews",
+    "Permian Basin",
+  ],
 
   // Set once deployed — used for canonical URLs and OpenGraph.
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://protechcollision.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ptcollisioninc.com",
 } as const;
 
-/** Services offered. Generic collision-repair set — adjust to match the shop. */
+/**
+ * Services offered. Every blurb here must be supported by what the shop has
+ * actually told us it does — no equipment, tooling, or credential claims that
+ * haven't been confirmed.
+ */
 export const services = [
   {
     slug: "collision-repair",
-    title: "Collision Repair",
+    title: "Complete Collision Repair",
     blurb:
-      "Full-service repair for everything from minor fender benders to major structural damage, restored to factory specification.",
+      "From a light fender bender to heavy damage, we handle the whole repair and return the vehicle to its pre-accident condition.",
     icon: "collision",
   },
   {
     slug: "paint-refinishing",
     title: "Paint & Refinishing",
     blurb:
-      "Computerized paint matching for a seamless, factory-quality finish that blends invisibly with your existing paint.",
+      "High-quality paint materials, sprayed in our down-draft heated booth for a professional finish that lasts.",
     icon: "paint",
   },
   {
     slug: "frame-straightening",
     title: "Frame & Unibody",
     blurb:
-      "Computer-measured frame straightening that returns your vehicle's structure to manufacturer tolerances.",
+      "Structural and frame work as part of a complete repair, so the vehicle goes back together the way it came apart.",
     icon: "frame",
   },
   {
     slug: "dent-repair",
     title: "Dent Repair",
     blurb:
-      "Paintless dent removal for hail damage, door dings, and minor creases — preserving your original factory paint.",
+      "Door dings, creases, and panel damage straightened and refinished to match the rest of the vehicle.",
     icon: "dent",
   },
   {
     slug: "hail-damage",
     title: "Hail Damage",
     blurb:
-      "West Texas storms are hard on vehicles. We handle hail claims start to finish and work directly with your insurer.",
+      "West Texas storms are hard on vehicles. Bring it in and we'll work the repair and the insurance claim together.",
     icon: "hail",
   },
   {
     slug: "glass-replacement",
     title: "Auto Glass",
     blurb:
-      "Windshield and window replacement, including recalibration of cameras and sensors on ADAS-equipped vehicles.",
+      "Windshield and window replacement handled alongside the rest of the collision repair.",
     icon: "glass",
   },
 ] as const;
 
 /** The repair process, shown to set customer expectations. */
 export const processSteps = [
-  { step: 1, title: "Free Estimate", detail: "Bring the vehicle by or send photos. We assess the damage and give you a written estimate at no cost." },
-  { step: 2, title: "Insurance Handling", detail: "We coordinate directly with your insurance adjuster so you don't have to chase paperwork." },
-  { step: 3, title: "Expert Repair", detail: "Certified technicians restore your vehicle using manufacturer-approved procedures and materials." },
-  { step: 4, title: "Quality Check", detail: "Every repair is inspected before delivery. We don't hand back keys until it's right." },
+  {
+    step: 1,
+    title: "Free Estimate",
+    detail:
+      "Bring the vehicle by and we'll look over the damage and put an estimate in writing, at no cost to you.",
+  },
+  {
+    step: 2,
+    title: "Insurance Claims",
+    detail:
+      "Most insurance claims accepted. We work with the adjuster so you aren't the one chasing paperwork.",
+  },
+  {
+    step: 3,
+    title: "Complete Repair",
+    detail:
+      "Bodywork and structural repair, then high-quality paint materials laid down in our down-draft heated booth.",
+  },
+  {
+    step: 4,
+    title: "Guaranteed Finish",
+    detail:
+      "Every repair is checked before you get the keys back, and all of our work is guaranteed.",
+  },
 ] as const;
 
 export type Service = (typeof services)[number];
