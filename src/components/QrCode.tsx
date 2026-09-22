@@ -63,12 +63,10 @@ export default function QrCode() {
 
           <p className="eyebrow">Scan to visit</p>
           <h2>
-            Put us on a<br />
-            <em>business card.</em>
+            {site.shortName}
           </h2>
           <p className="qr-blurb">
-            This code opens {site.shortName}&rsquo;s website. Print it on cards,
-            invoices, or the shop door — it never expires.
+            Point a phone camera at this code to open our website.
           </p>
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -95,8 +93,7 @@ export default function QrCode() {
           </div>
 
           <p className="qr-note">
-            SVG for print — it stays sharp at any size. PNG for anything that
-            won&rsquo;t take an SVG.
+            Save the code to share or print.
           </p>
         </div>
       </dialog>
