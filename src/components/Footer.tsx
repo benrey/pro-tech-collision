@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import Brand from "./Brand";
+import QrCode from "./QrCode";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -21,6 +22,7 @@ export default function Footer() {
             <Link href="/#services">Services</Link>
             <Link href="/#reviews">Reviews</Link>
             <Link href="/#contact">Free estimate</Link>
+            <QrCode />
             <Link href="/admin">Login</Link>
           </div>
         </div>

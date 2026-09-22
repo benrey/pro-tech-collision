@@ -1914,3 +1914,130 @@ html {
     transform: none;
   }
 }
+
+/* ---- Footer QR code link + dialog ---------------------------------- */
+
+/* Sits among the footer links, so it has to shed every button default and
+   inherit their type rather than look like a control. */
+.qr-link {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.68);
+  transition: color 0.2s ease;
+}
+.qr-link:hover {
+  color: var(--pop);
+}
+
+.qr-dialog {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  max-width: min(92vw, 420px);
+}
+.qr-dialog::backdrop {
+  background: rgba(32, 37, 42, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.qr-card {
+  position: relative;
+  background: var(--paper-bright);
+  border: 1px solid var(--line);
+  padding: 34px 32px 28px;
+  text-align: center;
+}
+.qr-card h2 {
+  font-size: clamp(26px, 5vw, 34px);
+  line-height: 1.05;
+  margin: 6px 0 14px;
+}
+.qr-blurb {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+/* The quiet zone is baked into the SVG, so the frame can sit flush. */
+.qr-image {
+  display: block;
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+}
+
+.qr-url {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 14px 0 18px;
+  color: var(--ink-soft);
+}
+
+.qr-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.qr-actions a,
+.qr-actions button {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 14px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper-bright);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.qr-actions a:hover,
+.qr-actions button:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.qr-note {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin-top: 16px;
+}
+
+.qr-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  appearance: none;
+  background: none;
+  border: 0;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.qr-close:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 520px) {
+  .qr-card {
+    padding: 28px 20px 24px;
+  }
+  .qr-image {
+    width: 200px;
+    height: 200px;
+  }
+}
