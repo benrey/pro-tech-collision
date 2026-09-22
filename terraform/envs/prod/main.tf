@@ -19,11 +19,21 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
   }
 }
 
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
+}
+
+# In CI this reads GITHUB_TOKEN from the environment; the workflow passes the
+# built-in token, which can manage this repository's own Pages settings.
+provider "github" {
+  owner = var.github_owner
 }
 
 # The zone module is only needed when the zone id isn't supplied directly.
@@ -44,4 +54,14 @@ module "dns" {
   cloudflare_zone_id = var.cloudflare_zone_id != "" ? var.cloudflare_zone_id : module.zone[0].zone_id
   domain_name        = var.domain_name
   pages_cname_target = var.pages_cname_target
+}
+
+# GitHub Pages settings — the custom domain and HTTPS enforcement that were
+# previously set by hand in the repo settings.
+module "pages" {
+  source = "../../modules/pages"
+
+  repository     = var.github_repository
+  domain_name    = var.domain_name
+  https_enforced = var.pages_https_enforced
 }

@@ -22,6 +22,7 @@ on:
 
 permissions:
   contents: read
+  pages: write
 
 concurrency:
   group: terraform-dns
@@ -58,10 +59,30 @@ jobs:
           fi
 
       - name: Terraform Init
+        env:
+          R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          # Remote state only when R2 is configured. Without it Terraform falls
+          # back to local state, which cannot track existing resources between
+          # runs -- see backend.tf.
+          if [ -n "${R2_ACCOUNT_ID:-}" ] && [ -n "${AWS_ACCESS_KEY_ID:-}" ]; then
+            echo "Using R2 remote state"
+            cat > backend.hcl <<EOF
+          bucket    = "${R2_BUCKET:-protech-tf-state}"
+          endpoints = { s3 = "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" }
+          EOF
+            init_args="-backend-config=backend.hcl"
+          else
+            echo "::warning::R2 not configured - using LOCAL state. Existing resources will conflict."
+            rm -f backend.tf
+            init_args=""
+          fi
           max_retries=3
           retry_count=0
-          until terraform init -upgrade; do
+          until terraform init -upgrade $init_args; do
             retry_count=$((retry_count + 1))
             if [ $retry_count -ge $max_retries ]; then
               echo "Terraform init failed after $max_retries attempts"
@@ -78,6 +99,9 @@ jobs:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_domain_name: ${{ vars.DOMAIN_NAME }}
           TF_VAR_pages_cname_target: ${{ vars.PAGES_CNAME_TARGET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           args=()
@@ -87,6 +111,9 @@ jobs:
           terraform plan -lock-timeout=10m -out=tfplan "${args[@]}"
 
       - name: Guard against touching mail records
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           set -euo pipefail
           terraform show -json tfplan > plan.json
@@ -119,4 +146,9 @@ jobs:
         if: >-
           github.event_name == 'push' ||
           (github.event_name == 'workflow_dispatch' && inputs.action == 'apply')
+        env:
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: terraform apply -auto-approve -lock-timeout=10m tfplan

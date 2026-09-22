@@ -37,3 +37,21 @@ variable "create_zone" {
   # already serving mail), so adopt it. Creating would fail on a name clash.
   default = false
 }
+
+variable "github_owner" {
+  description = "GitHub user or org that owns the repository"
+  type        = string
+  default     = "benrey"
+}
+
+variable "github_repository" {
+  description = "Repository serving the site via GitHub Pages"
+  type        = string
+  default     = "pro-tech-collision"
+}
+
+variable "pages_https_enforced" {
+  description = "Enforce HTTPS on the Pages origin. Set false until Pages has provisioned its certificate for the custom domain."
+  type        = bool
+  default     = true
+}
