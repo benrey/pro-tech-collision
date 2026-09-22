@@ -9,6 +9,11 @@ on:
         default: plan
         type: choice
         options: [plan, apply]
+      targets:
+        description: "optional -target args, space separated (partial apply)"
+        required: false
+        default: ""
+        type: string
   push:
     branches: [main]
     paths:
@@ -67,12 +72,19 @@ jobs:
           done
 
       - name: Terraform Plan
-        run: >
-          terraform plan -lock-timeout=10m -out=tfplan
-          -var="cloudflare_zone_id=${{ vars.ZONE_ID }}"
-          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}"
-          ${{ vars.DOMAIN_NAME && format('-var="domain_name={0}"', vars.DOMAIN_NAME) || '' }}
-          ${{ vars.PAGES_CNAME_TARGET && format('-var="pages_cname_target={0}"', vars.PAGES_CNAME_TARGET) || '' }}
+        env:
+          TARGETS: ${{ inputs.targets }}
+          TF_VAR_cloudflare_zone_id: ${{ vars.ZONE_ID }}
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_domain_name: ${{ vars.DOMAIN_NAME }}
+          TF_VAR_pages_cname_target: ${{ vars.PAGES_CNAME_TARGET }}
+        run: |
+          set -euo pipefail
+          args=()
+          for t in ${TARGETS:-}; do args+=("-target=$t"); done
+          [ -n "${TF_VAR_domain_name:-}" ] || unset TF_VAR_domain_name
+          [ -n "${TF_VAR_pages_cname_target:-}" ] || unset TF_VAR_pages_cname_target
+          terraform plan -lock-timeout=10m -out=tfplan "${args[@]}"
 
       - name: Guard against touching mail records
         run: |
