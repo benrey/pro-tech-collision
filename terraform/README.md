@@ -36,10 +36,15 @@ covered by `ssl = "full"` (not `strict`, because the origin's cert is valid for
 ## What differs from pluggdn
 
 pluggdn's `dns` module points at AWS — ALB, API Gateway, CloudFront — and needs
-an ACM cert per hostname, plus SES records for mail. None of that exists here:
-static site, no AWS account, no mail. So this stack is the same *shape* with a
-much smaller surface — zone, two content records, mail-null records, zone
-settings, one redirect rule.
+an ACM cert per hostname. None of that exists here: static site, no ACM, no
+ALB. So this stack is the same *shape* with a much smaller surface — two
+content records, zone settings, one redirect rule.
+
+**Mail is deliberately out of scope.** This domain *does* run mail (Amazon SES
+outbound, WorkMail inbound), but those records were created by the AWS setup
+and are managed there. Terraform declares no TXT or MX record, and the DNS
+workflow hard-fails any plan that would touch one — see the mail note in
+`modules/dns/main.tf`.
 
 ## Layout
 
@@ -68,19 +73,22 @@ Account Resources must include your account, otherwise Terraform cannot
 
 ### 2. Supply credentials (GitHub variables and secrets)
 
-Config lives in GitHub, not in a local tfvars file — same convention as
-pluggdn. Set it once:
+Config lives in the **`dev` GitHub environment**, not in a local tfvars file —
+same convention as pluggdn, whose workflows all declare `environment: dev`.
+The DNS job declares it too, which is what lets it read these.
+
+Set them in the UI (Settings -> Environments -> dev), or from the terminal:
 
 ```sh
-gh secret set CLOUDFLARE_API_TOKEN            # prompts, never echoed
-gh variable set ZONE_ID --body "<zone id>"    # Cloudflare dashboard, zone overview
+gh secret set CLOUDFLARE_API_TOKEN --env dev            # prompts, never echoed
+gh variable set ZONE_ID --env dev --body "<zone id>"    # Cloudflare zone overview
 ```
 
 Optional overrides (both have defaults in `variables.tf`):
 
 ```sh
-gh variable set DOMAIN_NAME --body "ptcollisioninc.com"
-gh variable set PAGES_CNAME_TARGET --body "benrey.github.io"
+gh variable set DOMAIN_NAME --env dev --body "ptcollisioninc.com"
+gh variable set PAGES_CNAME_TARGET --env dev --body "benrey.github.io"
 ```
 
 `ZONE_ID` is passed straight through, which skips the zone lookup — so the

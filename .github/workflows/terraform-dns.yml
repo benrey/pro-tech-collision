@@ -2,7 +2,7 @@ name: Terraform DNS
 
 # Cloudflare DNS + edge config for ptcollisioninc.com.
 #
-# Config comes from GitHub variables and secrets (same convention as pluggdn),
+# Config comes from the `dev` GitHub environment (same convention as pluggdn),
 # not a local terraform.tfvars:
 #
 #   secrets.CLOUDFLARE_API_TOKEN   Zone:Edit, DNS:Edit, Zone Settings:Edit
@@ -40,6 +40,9 @@ concurrency:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    # Credentials live in the `dev` environment, same as pluggdn. Without this
+    # line the job cannot read environment-scoped secrets or variables.
+    environment: dev
     defaults:
       run:
         working-directory: terraform/envs/prod
