@@ -433,7 +433,9 @@ html {
   padding: 7px 14px 7px 9px;
   color: #fff;
   background: var(--brand-red);
-  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+  transition:
+    background 0.25s var(--ease),
+    transform 0.25s var(--ease);
 }
 .brand:hover {
   background: var(--brand-red-soft);
@@ -530,7 +532,13 @@ html {
 }
 .hero-shade {
   background:
-    linear-gradient(90deg, rgba(6, 7, 8, 0.92) 0%, rgba(6, 7, 8, 0.72) 36%, rgba(6, 7, 8, 0.12) 71%, rgba(6, 7, 8, 0.15) 100%),
+    linear-gradient(
+      90deg,
+      rgba(6, 7, 8, 0.92) 0%,
+      rgba(6, 7, 8, 0.72) 36%,
+      rgba(6, 7, 8, 0.12) 71%,
+      rgba(6, 7, 8, 0.15) 100%
+    ),
     linear-gradient(0deg, rgba(6, 7, 8, 0.34), transparent 44%);
 }
 @keyframes hero-scale {
@@ -551,7 +559,8 @@ html {
   color: rgba(255, 255, 255, 0.65);
 }
 .edt .hero h1 {
-  max-width: 850px;
+  max-width: 980px;
+  font-size: clamp(3.2rem, 6.4vw, 6.4rem);
 }
 .edt .hero h1 em {
   color: var(--pop);
@@ -962,9 +971,43 @@ html {
   line-height: 1.7;
 }
 
-/* Shop promises — reuses the process list layout on the lighter paper */
+/* Shop promises — the client's six claims, set verbatim as display lines */
 .promise-section {
   background: var(--paper);
+}
+.promise-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.promise-list li {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 16px;
+  padding: 0 0 26px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--line);
+}
+.promise-list li:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.promise-list > li > span {
+  padding-top: 6px;
+  color: var(--brand-red);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.promise-list p {
+  max-width: 390px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.7vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.15;
 }
 
 /* Gallery */
@@ -986,7 +1029,10 @@ html {
 }
 .gallery-strip {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.82fr) minmax(220px, 0.43fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.82fr) minmax(
+      220px,
+      0.43fr
+    );
   align-items: start;
   width: min(100% - 32px, 1420px);
   margin-left: auto;
@@ -1647,6 +1693,10 @@ html {
   .edt h1 {
     font-size: clamp(3.2rem, 15vw, 5.2rem);
   }
+  /* The hero claim runs longer than a stock headline; size it to fit. */
+  .edt .hero h1 {
+    font-size: clamp(2.5rem, 10.4vw, 3.7rem);
+  }
   .edt h2 {
     font-size: clamp(2.7rem, 13vw, 4.2rem);
   }
@@ -1658,7 +1708,12 @@ html {
   }
   .hero-shade {
     background:
-      linear-gradient(90deg, rgba(6, 7, 8, 0.88) 0%, rgba(6, 7, 8, 0.62) 68%, rgba(6, 7, 8, 0.16) 100%),
+      linear-gradient(
+        90deg,
+        rgba(6, 7, 8, 0.88) 0%,
+        rgba(6, 7, 8, 0.62) 68%,
+        rgba(6, 7, 8, 0.16) 100%
+      ),
       linear-gradient(0deg, rgba(6, 7, 8, 0.6), transparent 52%);
   }
   .hero-content {
@@ -1679,14 +1734,13 @@ html {
     max-width: 310px;
     justify-content: space-between;
   }
+  /*
+   * Hidden on mobile: the stacked full-width hero buttons run into this
+   * absolutely-positioned note. The same line appears in the footer, so
+   * nothing is lost.
+   */
   .hero-side-note {
-    right: 20px;
-    bottom: 26px;
-    width: 132px;
-    padding-left: 10px;
-  }
-  .hero-side-note p {
-    font-size: 10px;
+    display: none;
   }
   .hero-scroll {
     display: none;
@@ -1772,7 +1826,8 @@ html {
   .process-layout h2 {
     position: static;
   }
-  .process-list li {
+  .process-list li,
+  .promise-list li {
     grid-template-columns: 42px 1fr;
     gap: 10px;
     padding-bottom: 25px;
@@ -1895,6 +1950,10 @@ html {
     color: var(--ink);
     background: var(--pop);
   }
+  /* Keep the fixed call bar from covering the end of the page. */
+  .site-footer {
+    padding-bottom: 88px;
+  }
 }
 
 /* Respect users who ask for less motion */
@@ -2006,7 +2065,9 @@ html {
   background: var(--ink);
   color: var(--paper-bright);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 .qr-actions a:hover,
 .qr-actions button:hover {

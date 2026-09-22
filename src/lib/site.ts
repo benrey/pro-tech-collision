@@ -72,51 +72,37 @@ export const site = {
     closed: [{ days: ["Saturday", "Sunday"], label: "Sat – Sun" }],
   },
 
-  // ✅ CONFIRMED — the shop's own claims, supplied by the owner. These are
-  // the only promises the site makes; do not add credentials, licenses, or
-  // certifications unless the owner confirms the shop actually holds them.
+  /**
+   * ✅ CONFIRMED — the client's six claims, WORD FOR WORD as they supplied
+   * them. Do not reword, re-punctuate, or "fix" these, including "insure" in
+   * the paint booth line — the client asked for their exact wording and has
+   * been told about the usage. They are the only promises the site makes; do
+   * not add credentials, licenses, or certifications.
+   */
   claims: {
     verified: true,
     items: [
-      {
-        name: "Restored to pre-accident condition",
-        detail:
-          "Complete collision repair that brings the vehicle back to the way it was before the wreck.",
-      },
-      {
-        name: "Down-draft heated paint booth",
-        detail:
-          "A professional paint job in a controlled, heated booth that pulls air down and away from the finish.",
-      },
-      {
-        name: "High-quality paint materials",
-        detail:
-          "Quality materials on every panel, so the color holds up long after the repair.",
-      },
-      {
-        name: "All work guaranteed",
-        detail: "We stand behind every repair that leaves the shop.",
-      },
-      {
-        name: "Most insurance claims accepted",
-        detail: "We work with most carriers and help you move the claim along.",
-      },
+      "Restored to pre collision/accident condition",
+      "Down draft heated paint booth to insure a professional paint job",
+      "High quality paint materials used",
+      "Complete collision repair",
+      "All work guaranteed",
+      "Most insurance claims accepted",
     ],
   },
 
-  // ✅ CONFIRMED — the owner's wording. No carrier list: naming specific
+  // ✅ CONFIRMED — the client's wording. No carrier list: naming specific
   // insurers implies a relationship the shop has not confirmed.
   insurance: {
     verified: true,
-    note: "Most insurance claims accepted. We'll help you get the claim moving.",
+    note: "Most insurance claims accepted",
   },
 
-  // ✅ CONFIRMED — the owner's wording. Deliberately not a term-limited or
+  // ✅ CONFIRMED — the client's wording. Deliberately not a term-limited or
   // "lifetime" warranty: it's a guarantee on the work, stated plainly.
   guarantee: {
     verified: true,
     headline: "All work guaranteed",
-    detail: "Every repair that leaves this shop is backed by us.",
   },
 
   // Service area for local SEO. Midland/Odessa is the Permian Basin metro.
@@ -143,14 +129,14 @@ export const services = [
     slug: "collision-repair",
     title: "Complete Collision Repair",
     blurb:
-      "From a light fender bender to heavy damage, we handle the whole repair and return the vehicle to its pre-accident condition.",
+      "From a light fender bender to heavy damage: complete collision repair, restored to pre collision/accident condition.",
     icon: "collision",
   },
   {
     slug: "paint-refinishing",
     title: "Paint & Refinishing",
     blurb:
-      "High-quality paint materials, sprayed in our down-draft heated booth for a professional finish that lasts.",
+      "High quality paint materials used, sprayed in our down draft heated paint booth to insure a professional paint job.",
     icon: "paint",
   },
   {
@@ -201,7 +187,7 @@ export const processSteps = [
     step: 3,
     title: "Complete Repair",
     detail:
-      "Bodywork and structural repair, then high-quality paint materials laid down in our down-draft heated booth.",
+      "Bodywork and structural repair, then high quality paint materials in our down draft heated paint booth.",
   },
   {
     step: 4,

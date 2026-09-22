@@ -2,8 +2,9 @@ import { site } from "@/lib/site";
 import Reveal from "../Reveal";
 
 /**
- * The shop's own promises, verbatim from the owner. Nothing here implies a
- * license, certification, or accreditation — see the note in site.ts.
+ * The client's six claims, rendered verbatim from site.claims. Nothing here
+ * implies a license, certification, or accreditation — see the note in site.ts.
+ * Do not reword the strings; they are the client's exact copy.
  */
 export default function ShopPromise() {
   return (
@@ -27,17 +28,14 @@ export default function ShopPromise() {
               <em>backed by us.</em>
             </h2>
           </Reveal>
-          <ol className="process-list">
+          <ul className="promise-list">
             {site.claims.items.map((claim, index) => (
-              <Reveal as="li" key={claim.name} delay={70 + index * 60}>
+              <Reveal as="li" key={claim} delay={70 + index * 60}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{claim.name}</h3>
-                  <p>{claim.detail}</p>
-                </div>
+                <p>{claim}</p>
               </Reveal>
             ))}
-          </ol>
+          </ul>
         </div>
       </div>
     </section>

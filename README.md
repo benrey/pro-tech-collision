@@ -34,16 +34,19 @@ accreditation** — no I-CAR, no ASE, no manufacturer certification. The shop ha
 not confirmed holding any, and advertising a credential you don't hold is a real
 legal problem.
 
-The only promises the site makes are the owner's own, held in `site.claims`:
+The only promises the site makes are the client's own six, held verbatim in
+`site.claims`:
 
-- Restored to pre-accident condition
-- Down-draft heated paint booth for a professional paint job
-- High-quality paint materials
+- Restored to pre collision/accident condition
+- Down draft heated paint booth to insure a professional paint job
+- High quality paint materials used
 - Complete collision repair
 - All work guaranteed
 - Most insurance claims accepted
 
-Anything beyond that list needs the owner's sign-off before it goes on the page.
+**Do not reword these**, including "insure" in the paint booth line — the client
+asked for their exact wording. Anything beyond this list needs their sign-off
+before it goes on the page.
 
 ---
 

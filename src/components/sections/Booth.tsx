@@ -13,7 +13,7 @@ export default function Booth() {
           sizes="(max-width: 760px) 100vw, 55vw"
           className="object-cover"
         />
-        <span className="photo-kicker">Down-draft heated paint booth</span>
+        <span className="photo-kicker">Down draft heated paint booth</span>
       </Reveal>
       <div className="booth-copy">
         <Reveal>
@@ -23,25 +23,24 @@ export default function Booth() {
         </Reveal>
         <Reveal delay={70}>
           <h2 className="section-heading-gap">
-            A down-draft
+            A down draft
             <br />
             <em>heated booth.</em>
           </h2>
         </Reveal>
         <Reveal delay={130}>
           <p>
-            Our down-draft heated paint booth pulls air down and away from the
-            vehicle while the finish cures, which is what ensures a professional
-            paint job. We spray high-quality paint materials in it, every time.
+            Down draft heated paint booth to insure a professional paint job.
+            High quality paint materials used.
           </p>
         </Reveal>
         <Reveal delay={180}>
           <div className="booth-notes">
             <span>
-              <b>01</b> Down-draft airflow
+              <b>01</b> Down draft heated booth
             </span>
             <span>
-              <b>02</b> High-quality paint materials
+              <b>02</b> High quality paint materials
             </span>
           </div>
         </Reveal>

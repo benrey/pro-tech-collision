@@ -23,8 +23,7 @@ export default function Services() {
           </div>
           <Reveal delay={130}>
             <p className="section-intro">
-              Whether it is a small scrape or a hard hit, we handle the complete
-              repair and bring your vehicle back to its pre-accident
+              Complete collision repair, restored to pre collision/accident
               condition—without adding more stress to your week.
             </p>
           </Reveal>

@@ -33,10 +33,10 @@ const dmMono = DM_Mono({
 });
 
 const description =
-  `Complete collision repair, paint, frame work, and hail damage repair in ` +
-  `${site.address.city}, ${site.address.state}. Vehicles restored to ` +
-  `pre-accident condition in a down-draft heated paint booth. Most insurance ` +
-  `claims accepted, and all work guaranteed.`;
+  `Complete collision repair in ${site.address.city}, ${site.address.state}. ` +
+  `Restored to pre collision/accident condition. Down draft heated paint ` +
+  `booth to insure a professional paint job. High quality paint materials ` +
+  `used. All work guaranteed. Most insurance claims accepted.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

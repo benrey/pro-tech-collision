@@ -25,16 +25,15 @@ export default function Hero() {
         </Reveal>
         <Reveal delay={70}>
           <h1>
-            Built to look like
+            Restored to pre
             <br />
-            <em>nothing happened.</em>
+            <em>collision condition</em>
           </h1>
         </Reveal>
         <Reveal delay={140}>
           <p className="hero-copy">
-            Complete collision repair that restores your vehicle to its
-            pre-accident condition — and a team that makes a hard moment feel a
-            little easier.
+            Complete collision repair. All work guaranteed. Most insurance
+            claims accepted.
           </p>
         </Reveal>
         <Reveal delay={210}>
