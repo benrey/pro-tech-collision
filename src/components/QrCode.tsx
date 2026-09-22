@@ -5,12 +5,14 @@ import { asset } from "@/lib/assets";
 import { site } from "@/lib/site";
 
 /**
- * Footer link that opens the shop's QR code for print.
+ * Footer link that shows the shop's QR code.
+ *
+ * Copy here is written for a site visitor, not for the shop — this sits in the
+ * public footer. The downloads are still offered (SVG for print, PNG for
+ * everything that rejects SVG) but without the print-production jargon.
  *
  * The codes are generated at build time by scripts/generate-qr.mjs, so this is
- * just a viewer — nothing is encoded in the browser. The SVG is what gets
- * handed to a printer (vector, so it stays sharp at any size); the PNG is
- * offered alongside for the places that reject SVG uploads.
+ * just a viewer — nothing is encoded in the browser.
  *
  * Uses a native <dialog> for focus trapping and Escape-to-close rather than
  * hand-rolling either.
