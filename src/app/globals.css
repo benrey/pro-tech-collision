@@ -1919,14 +1919,19 @@ html {
 
 /* Sits among the footer links, so it has to shed every button default and
    inherit their type rather than look like a control. */
+/* A <button> among <a> siblings: it has to shed every control default and
+   inherit the row's alignment, which flips to the left on mobile. Hardcoding
+   text-align here would leave it indented once .footer-links goes left. */
 .qr-link {
   appearance: none;
   background: none;
   border: 0;
   padding: 0;
+  margin: 0;
   font: inherit;
   font-weight: 700;
-  text-align: right;
+  text-align: inherit;
+  justify-self: stretch;
   cursor: pointer;
   color: rgba(255, 255, 255, 0.68);
   transition: color 0.2s ease;
