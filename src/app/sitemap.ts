@@ -4,13 +4,9 @@ import { site } from "@/lib/site";
 // Required for `output: export` (the GitHub Pages showcase build).
 export const dynamic = "force-static";
 
+/** Pages that should be found by search. The owner dashboard is left out. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: site.url,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-  ];
+  // Date only: the build day, not a timestamp that changes on every request.
+  const built = new Date().toISOString().slice(0, 10);
+  return [{ url: site.url, lastModified: built }];
 }

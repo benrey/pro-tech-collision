@@ -159,6 +159,34 @@ registrar's DNS at Vercel.
 - Validate the structured data with the
   [Rich Results Test](https://search.google.com/test/rich-results).
 
+### Analytics
+
+Page views are counted with Cloudflare Web Analytics: no cookies, no consent
+banner. Every page loads `/analytics.js`. In the repository that file is empty;
+the Pages deploy replaces it with the loader (`scripts/analytics.mjs`), which
+only runs on `ptcollisioninc.com`. Local builds and previews send nothing.
+
+Terraform creates the analytics site (`cloudflare_web_analytics_site` in
+`terraform/envs/prod/main.tf`). One-time setup:
+
+1. Give the Cloudflare API token **Account Settings: Edit** (the permission firmelinkweb's token uses for this), and set the
+   Actions variable `CLOUDFLARE_ACCOUNT_ID` (next to `ZONE_ID`).
+2. Run the **Terraform DNS** workflow with `apply`. Its summary shows the
+   token.
+3. Save that token as the **repository** variable `WEB_ANALYTICS_TOKEN` and
+   re-run **Deploy to GitHub Pages**.
+
+The numbers are in the Cloudflare dashboard under Analytics & Logs, Web
+Analytics.
+
+### Search and sharing
+
+`src/lib/seo.ts` builds the page metadata, the structured data and
+`/llms.txt` from the facts in `src/lib/site.ts`. The share image
+(`public/og.jpg`), app icons and `favicon.ico` are committed files rendered by
+`npm run og` (see the header of `scripts/og.mjs`); rerun it when the brand,
+headline or hero photo changes.
+
 ---
 
 ## Structure

@@ -81,6 +81,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ vars.ZONE_ID }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_account_id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
 
@@ -120,6 +121,22 @@ jobs:
               echo "::warning::could not import $setting"
           done
 
+          # Web Analytics site (only when the account id is configured). Without
+          # this import every run would create another analytics site for the
+          # same hostname, each with a new token.
+          ACCOUNT="${TF_VAR_cloudflare_account_id:-}"
+          addr='cloudflare_web_analytics_site.site[0]'
+          if [ -n "$ACCOUNT" ] && ! terraform state list 2>/dev/null | grep -qxF "$addr"; then
+            tag=$(api "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT/rum/site_info/list?per_page=100" \
+                  | DOMAIN="$DOMAIN" python3 -c "import json,os,sys; d=os.environ['DOMAIN']; r=json.load(sys.stdin).get('result') or []; m=[s for s in r if s.get('host')==d or (s.get('ruleset') or {}).get('zone_name')==d]; print(m[0]['site_tag'] if m else '')")
+            if [ -n "$tag" ]; then
+              echo "importing $addr ($tag)"
+              terraform import -lock-timeout=10m "$addr" "$ACCOUNT/$tag"
+            else
+              echo "no Web Analytics site for $DOMAIN yet; it will be created"
+            fi
+          fi
+
           # Pages config exists once the site has been deployed.
           if ! terraform state list 2>/dev/null | grep -qx module.pages.github_repository_pages.this; then
             echo "importing pages"
@@ -135,6 +152,7 @@ jobs:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_domain_name: ${{ vars.DOMAIN_NAME }}
           TF_VAR_pages_cname_target: ${{ vars.PAGES_CNAME_TARGET }}
+          TF_VAR_cloudflare_account_id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -182,3 +200,16 @@ jobs:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: terraform apply -auto-approve -lock-timeout=10m tfplan
+
+      # The token is public (it is served to every visitor). It goes into the
+      # repository variable WEB_ANALYTICS_TOKEN, which the Pages deploy reads.
+      - name: Show the Web Analytics token
+        if: >-
+          vars.CLOUDFLARE_ACCOUNT_ID != '' &&
+          (github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' && inputs.action == 'apply'))
+        run: |
+          token=$(terraform output -raw web_analytics_token 2>/dev/null || true)
+          if [ -n "$token" ]; then
+            echo "Web Analytics token: \`$token\` — set it as the repository variable \`WEB_ANALYTICS_TOKEN\`." >> "$GITHUB_STEP_SUMMARY"
+          fi

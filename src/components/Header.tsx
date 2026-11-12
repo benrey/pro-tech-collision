@@ -16,8 +16,19 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Tucked away while reading down the page, back the moment you scroll up.
+  const [hidden, setHidden] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      // Ignore sub-pixel jitter so the bar doesn't flicker at rest.
+      if (Math.abs(y - lastY) < 6) return;
+      setHidden(y > lastY && y > 600);
+      lastY = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -43,7 +54,9 @@ export default function Header() {
         </a>
       </div>
 
-      <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
+      <header
+        className={`site-header ${scrolled ? "is-scrolled" : ""} ${hidden && !open ? "is-hidden" : ""}`}
+      >
         <Brand />
 
         <nav className="desktop-nav" aria-label="Primary navigation">
@@ -84,6 +97,7 @@ export default function Header() {
       <nav
         className={`mobile-menu ${open ? "is-open" : ""}`}
         id="mobile-menu"
+        data-lenis-prevent
         aria-label="Mobile navigation"
       >
         {navLinks.map((link, index) => (

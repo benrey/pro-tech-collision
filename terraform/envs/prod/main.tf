@@ -65,3 +65,20 @@ module "pages" {
   domain_name    = var.domain_name
   https_enforced = var.pages_https_enforced
 }
+
+# Cloudflare Web Analytics for the public site: page views and load times, no cookies.
+# The same setup as the firmelinkweb repo: Terraform creates the analytics site, and the deploy
+# workflow writes its token into /analytics.js (scripts/analytics.mjs). The token is public, it
+# appears in the page. auto_install stays off so the page is counted once, by that loader, and
+# only on the real hostname.
+#
+# Web Analytics belongs to the account, not the zone, so this needs the account id and an API
+# token with "Account Settings: Edit" (as in firmelinkweb). Until cloudflare_account_id is set the resource is
+# skipped, and the rest of this stack keeps working with its zone-scoped token.
+resource "cloudflare_web_analytics_site" "site" {
+  count = var.cloudflare_account_id != "" ? 1 : 0
+
+  account_id   = var.cloudflare_account_id
+  host         = var.domain_name
+  auto_install = false
+}

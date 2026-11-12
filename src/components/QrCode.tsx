@@ -52,7 +52,7 @@ export default function QrCode() {
         QR code
       </button>
 
-      <dialog ref={ref} className="qr-dialog" onClose={() => setOpen(false)}>
+      <dialog ref={ref} className="qr-dialog" data-lenis-prevent onClose={() => setOpen(false)}>
         <div className="qr-card">
           <button
             type="button"

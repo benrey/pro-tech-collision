@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import ScrollMotion from "@/components/ScrollMotion";
 import StructuredData from "@/components/StructuredData";
 import Booth from "@/components/sections/Booth";
 import ClosingCta from "@/components/sections/ClosingCta";
@@ -17,6 +18,7 @@ export default function Home() {
   return (
     <div className="edt" style={{ background: "var(--paper)" }}>
       <StructuredData />
+      <ScrollMotion />
       <div className="page-noise" aria-hidden="true" />
       <Header />
       <main id="main">

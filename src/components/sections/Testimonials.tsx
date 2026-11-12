@@ -67,6 +67,7 @@ export default async function Testimonials() {
                   key={item.id}
                   delay={80 + index * 60}
                   className={`review-card ${index === 1 ? "review-card-dark" : ""}`}
+                  drift={index === 1 ? 0.05 : undefined}
                 >
                   <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
                   <figcaption>
@@ -84,6 +85,7 @@ export default async function Testimonials() {
                   key={review.tag}
                   delay={80 + index * 60}
                   className={`review-card ${index === 1 ? "review-card-dark" : ""}`}
+                  drift={index === 1 ? 0.05 : undefined}
                 >
                   <blockquote>&ldquo;{review.quote}&rdquo;</blockquote>
                   <figcaption>

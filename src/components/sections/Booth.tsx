@@ -5,13 +5,14 @@ import Reveal from "../Reveal";
 export default function Booth() {
   return (
     <section className="booth-section" id="paint-booth">
-      <Reveal className="booth-photo">
+      <Reveal className="booth-photo reveal-wipe">
         <Image
           src={asset("/images/paint-booth-truck.png")}
           alt="A full-size automotive paint booth with a pickup truck inside"
           fill
           sizes="(max-width: 760px) 100vw, 55vw"
           className="object-cover"
+          data-parallax
         />
         <span className="photo-kicker">Down draft heated paint booth</span>
       </Reveal>

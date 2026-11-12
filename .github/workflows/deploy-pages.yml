@@ -41,6 +41,17 @@ jobs:
           STATIC_EXPORT: "1"
           NEXT_PUBLIC_SITE_URL: https://ptcollisioninc.com
 
+      # Cloudflare Web Analytics: page views, no cookies. The only file that
+      # differs from the build: the loader, which needs the site token
+      # (Terraform output web_analytics_token; public, it is served to every
+      # visitor). Until the variable is set the placeholder ships and nothing
+      # is counted.
+      - name: Write the analytics loader
+        if: vars.WEB_ANALYTICS_TOKEN != ''
+        env:
+          ANALYTICS_TOKEN: ${{ vars.WEB_ANALYTICS_TOKEN }}
+        run: node scripts/analytics.mjs
+
       - run: touch out/.nojekyll
 
       # Tells GitHub Pages to accept the custom domain. Without it Pages serves

@@ -16,3 +16,8 @@ output "site_url" {
   description = "Canonical site URL"
   value       = "https://${var.domain_name}"
 }
+
+output "web_analytics_token" {
+  description = "Public Cloudflare Web Analytics token. Store it as the repository variable WEB_ANALYTICS_TOKEN; the deploy workflow writes it into /analytics.js."
+  value       = one(cloudflare_web_analytics_site.site[*].site_token)
+}

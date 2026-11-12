@@ -3,7 +3,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Fades/slides children in when they enter the viewport.
+ * Fades/slides children in when they enter the viewport, and resets once they
+ * drop back below it — so the entrance plays again each time you scroll down
+ * to it. Content you have already passed (above the viewport) stays put.
  *
  * Works by toggling a class rather than React state: the observer adds
  * `is-visible` directly, so there's no re-render and no setState-in-effect.
@@ -14,12 +16,18 @@ export default function Reveal({
   delay = 0,
   as: Tag = "div",
   className = "",
+  drift,
 }: {
   children: ReactNode;
   /** Stagger offset in ms. */
   delay?: number;
   as?: "div" | "section" | "li" | "span" | "figure";
   className?: string;
+  /**
+   * Travels slightly faster (positive) or slower (negative) than the page
+   * while scrolling. Picked up by ScrollMotion via `data-drift`.
+   */
+  drift?: number;
 }) {
   const ref = useRef<HTMLElement | null>(null);
 
@@ -32,7 +40,9 @@ export default function Reveal({
         for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+          } else if (entry.boundingClientRect.top > 0) {
+            // Left through the bottom edge: rewind so it can play again.
+            entry.target.classList.remove("is-visible");
           }
         }
       },
@@ -48,6 +58,7 @@ export default function Reveal({
       // Ref type is intentionally loose across the small set of allowed tags.
       ref={ref as React.Ref<never>}
       className={`reveal ${className}`}
+      data-drift={drift}
       style={delay ? ({ "--reveal-delay": `${delay}ms` } as React.CSSProperties) : undefined}
     >
       {children}

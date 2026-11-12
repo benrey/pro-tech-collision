@@ -75,19 +75,21 @@ export default async function Gallery() {
                 fill
                 sizes="(max-width: 760px) 100vw, 45vw"
                 className="object-cover"
+                data-parallax
               />
               <figcaption>
                 <span>Refinishing</span>
                 <b>CONCEPT</b>
               </figcaption>
             </figure>
-            <figure className="gallery-tile gallery-tile-offset">
+            <figure className="gallery-tile gallery-tile-offset" data-drift="0.07">
               <Image
                 src={asset("/images/workshop-hero.png")}
                 alt="Concept image of a refinished car in a collision repair workshop"
                 fill
                 sizes="(max-width: 760px) 100vw, 35vw"
                 className="object-cover"
+                data-parallax
               />
               <figcaption>
                 <span>Collision repair</span>

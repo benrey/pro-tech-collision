@@ -13,7 +13,7 @@ variable "cloudflare_zone_id" {
 }
 
 variable "cloudflare_account_id" {
-  description = "Cloudflare account ID that owns the zone. Only needed when creating/looking up the zone (i.e. cloudflare_zone_id is empty)."
+  description = "Cloudflare account ID that owns the zone. Needed for Web Analytics, and for creating/looking up the zone when cloudflare_zone_id is empty. Leave empty to skip both."
   type        = string
   default     = ""
 }

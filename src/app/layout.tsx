@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Mono, Manrope, Space_Grotesk, Syne } from "next/font/google";
+import { asset } from "@/lib/assets";
+import { description, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -32,19 +34,19 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-const description =
-  `Complete collision repair in ${site.address.city}, ${site.address.state}. ` +
-  `Restored to pre collision/accident condition. Down draft heated paint ` +
-  `booth to insure a professional paint job. High quality paint materials ` +
-  `used. All work guaranteed. Most insurance claims accepted.`;
-
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  ...pageMetadata({
+    title: `${site.name} — Auto Body & Collision Repair in ${site.address.city}, ${site.address.state}`,
+    absoluteTitle: true,
+    description,
+    path: "/",
+  }),
   title: {
     default: `${site.name} — Auto Body & Collision Repair in ${site.address.city}, ${site.address.state}`,
     template: `%s | ${site.shortName}`,
   },
-  description,
+  applicationName: site.name,
   keywords: [
     "auto body shop",
     "collision repair",
@@ -55,26 +57,11 @@ export const metadata: Metadata = {
     "auto paint",
     ...site.serviceArea.map((area) => `collision repair ${area}`),
   ],
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} — Auto Body & Collision Repair`,
-    description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — Auto Body & Collision Repair`,
-    description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "/",
-  },
+};
+
+export const viewport: Viewport = {
+  // The hero is dark ink in both themes, so the browser chrome matches it.
+  themeColor: "#20252a",
 };
 
 export default function RootLayout({
@@ -92,6 +79,8 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('protech-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
           }}
         />
+        {/* Empty in local builds. The deploy workflow fills it in: see scripts/analytics.mjs. */}
+        <script defer src={asset("/analytics.js")} />
       </head>
       <body
         className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable} ${dmMono.variable} font-sans antialiased`}

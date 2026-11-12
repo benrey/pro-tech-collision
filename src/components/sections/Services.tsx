@@ -35,7 +35,8 @@ export default function Services() {
             return (
               <Reveal
                 key={service.slug}
-                delay={(index % 3) * 70}
+                delay={(index % 3) * 110}
+                drift={index % 3 === 1 ? 0.05 : undefined}
                 as="div"
                 className={`service-card ${index === 0 ? "service-card-featured" : ""}`}
               >
