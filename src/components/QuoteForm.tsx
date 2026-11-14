@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { site } from "@/lib/site";
@@ -115,7 +116,11 @@ export default function QuoteForm() {
         <a href={site.phone.href} style={{ fontWeight: 800 }}>
           {site.phone.display}
         </a>
-        . No obligation either way.
+        . No obligation either way. See our{" "}
+        <Link href="/privacy" style={{ textDecoration: "underline" }}>
+          privacy policy
+        </Link>
+        .
       </p>
     </form>
   );

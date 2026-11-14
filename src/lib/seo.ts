@@ -171,6 +171,8 @@ export function llmsText() {
     "## Pages",
     "",
     `- [Home](${site.url}/): services, paint booth, reviews, map and estimate request`,
+    `- [Privacy policy](${site.url}/privacy): what the website collects and how it is used`,
+    `- [Terms of service](${site.url}/terms): terms for using the website`,
     "",
   ].join("\n");
 }
