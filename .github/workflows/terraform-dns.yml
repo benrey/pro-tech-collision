@@ -163,7 +163,6 @@ jobs:
           terraform plan -lock-timeout=10m -out=tfplan "${args[@]}"
 
       - name: Guard against touching mail records
-        env:
         run: |
           set -euo pipefail
           terraform show -json tfplan > plan.json
