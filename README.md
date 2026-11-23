@@ -179,6 +179,16 @@ Terraform creates the analytics site (`cloudflare_web_analytics_site` in
 The numbers are in the Cloudflare dashboard under Analytics & Logs, Web
 Analytics.
 
+Google Analytics runs from the same loader when the **repository** variable
+`GOOGLE_TAG_ID` holds a stream ID (`G-...`) or a Tag Manager container
+(`GTM-...`); either variable works without the other. Advertising signals stay
+denied, browsers sending Global Privacy Control or Do Not Track load nothing,
+and visitors in the EEA, UK and Switzerland get no analytics cookies. Next.js
+changes pages in the browser, and GA4's enhanced measurement counts those as
+page views. The numbers are under Reports in Google Analytics (Realtime within
+a minute). The privacy policy (`src/app/privacy/page.tsx`) describes both
+tools; change it if this changes.
+
 ### Search and sharing
 
 `src/lib/seo.ts` builds the page metadata, the structured data and

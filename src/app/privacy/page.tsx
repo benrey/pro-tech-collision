@@ -19,14 +19,14 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy policy"
-      effective="November 14, 2026"
+      effective="November 19, 2026"
       intro={`This page explains what ${site.name} collects through this website, what we do with it, and how to reach us about it.`}
     >
       <h2>The short version</h2>
       <p>
         We collect what you send us in the estimate request form so we can get back to you about
-        your vehicle. We do not sell your information, and we do not use advertising or tracking
-        cookies.
+        your vehicle. We do not sell your information, and we do not use advertising cookies. We
+        count visits with Cloudflare Web Analytics and Google Analytics.
       </p>
 
       <h2>What we collect</h2>
@@ -50,6 +50,18 @@ export default function PrivacyPage() {
         viewed, the site that linked to us, and the type of browser and device, and the country a
         visit came from. It does not use cookies and it does not identify you or follow you to
         other websites.
+      </p>
+      <p>
+        We also use Google Analytics to see how visitors use the site, such as which pages are
+        viewed and how long a visit lasts. It sets cookies that tell repeat visits apart. We have
+        turned off Google&apos;s advertising features, so this information is not used for ads.
+        Visitors in the European Economic Area, the United Kingdom and Switzerland get no
+        analytics cookies, and if your browser sends a Global Privacy Control or Do Not Track
+        signal, Google Analytics does not load at all. Google processes this information under{" "}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          Google&apos;s privacy policy
+        </a>
+        .
       </p>
 
       <h3>Technical information</h3>
